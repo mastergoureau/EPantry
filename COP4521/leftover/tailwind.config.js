@@ -13,7 +13,10 @@ module.exports = {
       'secondary': '#919e8e',
       'accent': '#c0c0c0',
       'muted': '#EBF4E6',
-     },     
+     }, 
+     container: {
+      center: true,
+    },    
     extend: {
       backgroundImage: {
         'cooking': "url('/cooking.jpg')",
