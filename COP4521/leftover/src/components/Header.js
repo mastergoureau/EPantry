@@ -11,8 +11,12 @@ const Header = () => {
  const links = [
     {
       id: 1,
-      link: "register",
+      link: "login",
     },
+    {
+      id: 2,
+      link: "register",
+    }
     // Add more links as needed...
  ];
 
