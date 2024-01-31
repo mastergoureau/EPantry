@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Register() {
     return (
       <div className="flex h-screen">
-        <div className="w-1/2 flex items-center justify-center">
+        <div className="w-full flex items-center justify-center">
           <form className="w-1/2 bg-primary flex flex-col rounded-lg shadow-2xl space-y-2 text-left p-6">
             <h1 className="text-3xl font-signature mb-6 text-muted">Create your Account</h1>
             <label className="font-bold text-lg text-muted">First Name</label>
@@ -47,7 +47,7 @@ export default function Register() {
             </button>
           </form>
         </div>
-        <Image src="/registration.jpg" width={400} height={400} className="w-1/2 h-full"/>
+        <Image src="/registration.jpg" width={500} height={400} className="w-1/2 h-full md:block hidden"/>
       </div>
     );
   }
