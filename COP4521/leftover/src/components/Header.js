@@ -36,7 +36,7 @@ const Header = () => {
         };
     }, []);
  return (
-    <div className="flex justify-between items-center bg-primary text-muted w-full h-20 px-4 nav">
+    <div className="flex fixed top-0 justify-between items-center bg-primary text-muted w-full h-20 px-4 nav">
       <div>
         <h1 className="text-5xl font-signature ml-2">
           <a
