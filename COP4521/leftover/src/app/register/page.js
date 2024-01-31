@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Register() {
     return (
@@ -46,6 +47,7 @@ export default function Register() {
             <button className="bg-secondary hover:bg-muted text-white hover:text-secondary rounded-lg py-2">
               Create Account
             </button>
+            <h4 className="pt-4 text-muted text-center"> If you already have an account <Link href="/login" className="hover:text-secondary">click here to login</Link></h4>
           </form>
         </div>
         <Image src="/registration.jpg" width={500} height={400} className="w-1/2 h-full lg:block hidden"/>

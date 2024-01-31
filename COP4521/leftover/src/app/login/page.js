@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Login() {
     return (
@@ -22,6 +23,7 @@ export default function Login() {
             <button className="bg-secondary hover:bg-muted text-white hover:text-secondary rounded-lg py-2">
               Create Account
             </button>
+            <h4 className="pt-4 text-muted text-center"> If you need an account <Link href="/register" className="hover:text-secondary">click here to register</Link></h4>
           </form>
         </div>
         <Image src="/login.jpg" width={500} height={400} className="w-1/2 h-full lg:block hidden"/>
