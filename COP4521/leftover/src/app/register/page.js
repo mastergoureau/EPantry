@@ -4,7 +4,7 @@ export default function Register() {
     return (
       <div className="flex h-screen">
         <div className="w-full flex items-center justify-center">
-          <form className="w-1/2 bg-primary flex flex-col rounded-lg shadow-2xl space-y-2 text-left p-6">
+          <form className="w-1/2 bg-primary flex flex-col rounded-lg shadow-2xl space-y-2 text-left p-6 mt-12">
             <h1 className="text-3xl font-signature mb-6 text-muted">Create your Account</h1>
             <label className="font-bold text-lg text-muted">First Name</label>
             <input
@@ -42,12 +42,13 @@ export default function Register() {
               type="password"
               placeholder="Confirm Password"
             />
+            <div className='p-4'/>
             <button className="bg-secondary hover:bg-muted text-white hover:text-secondary rounded-lg py-2">
               Create Account
             </button>
           </form>
         </div>
-        <Image src="/registration.jpg" width={500} height={400} className="w-1/2 h-full md:block hidden"/>
+        <Image src="/registration.jpg" width={500} height={400} className="w-1/2 h-full lg:block hidden"/>
       </div>
     );
   }
