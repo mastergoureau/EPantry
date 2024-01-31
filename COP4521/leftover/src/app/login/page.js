@@ -24,7 +24,7 @@ export default function Login() {
             </button>
           </form>
         </div>
-        <Image src="/registration.jpg" width={500} height={400} className="w-1/2 h-full lg:block hidden"/>
+        <Image src="/login.jpg" width={500} height={400} className="w-1/2 h-full lg:block hidden"/>
       </div>
     );
   }
