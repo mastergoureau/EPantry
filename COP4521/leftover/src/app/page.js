@@ -18,7 +18,7 @@ export default function Home() {
             </button>
             </Link>
           </div>
-          <Image className="px-5 hidden sm:block" src="/pantry.jpg" width={400} height={300} />
+          <Image className="w-1/2 h-full hidden lg:block" src="/pantry.jpg" width={400} height={300} />
         </div>
       </div>
     </div>
