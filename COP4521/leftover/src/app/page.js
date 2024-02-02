@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="h-screen flex items-center justify-center">
-      <div>
+    <div className="h-screen flex">
+      <div className="w-full flex items-center justify-center">
         <div className="container mx-auto flex flex-col lg:flex-row lg:gap-2 gap-6 space-x-extra">
           <div className="flex items-center justify-center flex-col gap-y-8 mt-20 lg:mt-0 mx-4">
             <h1 className="text-5xl font-bold text-primary">Do you want an easy way to find recipies with the food <span className="text-secondary">LeftOver </span>in your pantry?</h1>
@@ -18,7 +18,7 @@ export default function Home() {
             </button>
             </Link>
           </div>
-          <Image className="w-1/2 h-full hidden lg:block" src="/pantry.jpg" width={400} height={300} />
+          <Image className="w-1/2 max-h-screen hidden lg:block object-cover" src="/pantry.jpg" width={400} height={300} />
         </div>
       </div>
     </div>
