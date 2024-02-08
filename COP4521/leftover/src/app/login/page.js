@@ -5,7 +5,7 @@ export default function Login() {
     return (
       <div className="flex h-screen">
         <div className="w-full flex items-center justify-center">
-          <form className="w-1/2 bg-primary flex flex-col rounded-lg shadow-2xl space-y-2 text-left p-6">
+          <form className="w-full max-w-md mx-auto bg-primary flex flex-col rounded-lg shadow-2xl space-y-1 text-left p-4 mt-20">
             <h1 className="text-3xl font-signature mb-6 text-muted">Login to your Account</h1>
             <label className="font-bold text-lg text-muted">Username</label>
             <input
@@ -15,12 +15,12 @@ export default function Login() {
             />
             <label className="font-bold text-lg text-muted">Password</label>
             <input
-              className="border border-accent rounded-lg px-2 py-2"
+              className="border border-accent rounded-lg px-2 py-1"
               type="password"
               placeholder="Password"
             />
             <div className='p-4'/>
-            <button className="bg-secondary hover:bg-muted text-white hover:text-secondary rounded-lg py-2">
+            <button className="bg-secondary hover:bg-muted text-white hover:text-secondary rounded-lg py-1">
               Create Account
             </button>
             <h4 className="pt-4 text-muted text-center"> If you need an account <Link href="/register" className="hover:text-secondary">click here to register</Link></h4>
