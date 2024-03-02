@@ -3,11 +3,11 @@
 -- email address could also be a primary key but will be used for login
 -- user password will be a hashed version of their pasword to ensure Authorization is correct
 CREATE TABLE Users(
-    username SERIAL PRIMARY KEY,
+    email_address VARCHAR(255) PRIMARY KEY,
+    username SERIAL,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    email_address VARCHAR(255) NOT NULL,
-    user_password VARCHAR(255) NOT NULL,
+    user_password VARCHAR(255) NOT NULL
 );
 
 -- Create separate table for the three roles we have
@@ -16,8 +16,6 @@ CREATE TABLE Roles(
     role_name VARCHAR(20) NOT NULL
 );
 
--- insert the three roles into their respective table
-INSERT INTO Roles(role_name) VALUES ('admin'), ('chef'), ('basic');
 
 --create a table that define relationship users have with their roles
 CREATE TABLE User_Roles(
@@ -68,7 +66,7 @@ CREATE TABLE Recipe_Ingredients(
     measurement varchar(8) NULL,
     FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id),
     FOREIGN KEY (ing_name) REFERENCES Recipe_Foods(food_name)
-    );
+);
 
 CREATE TABLE Steps(
     step_id SERIAL PRIMARY KEY,
