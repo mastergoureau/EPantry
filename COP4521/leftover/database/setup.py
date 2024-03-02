@@ -1,4 +1,5 @@
 import psycopg2
+import os
 #from config file we want to import config function
 from config import config
 

@@ -10,6 +10,7 @@ CREATE TABLE Users(
     user_password VARCHAR(255) NOT NULL
 );
 
+
 -- Create separate table for the three roles we have
 CREATE TABLE Roles(
     role_id SERIAL PRIMARY KEY,
@@ -19,8 +20,8 @@ CREATE TABLE Roles(
 
 --create a table that define relationship users have with their roles
 CREATE TABLE User_Roles(
-    user_id SERIAL,
-    role_id SERIAL,
+    user_id SERIAL,           -- same this as username in the Users table
+    role_id SERIAL, 
     FOREIGN KEY (user_id) REFERENCES Users(username),
     FOREIGN KEY (role_id) REFERENCES Roles(role_id)
 );
