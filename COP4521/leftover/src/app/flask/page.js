@@ -7,7 +7,7 @@ const flask = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/data');
+        const response = await fetch('http://127.0.0.1:5000/api/data');
         const jsonData = await response.json();
         setData(jsonData);
       } catch (error) {
@@ -20,7 +20,7 @@ const flask = () => {
 
   return (
     <div>
-        <h1>Flask</h1>
+        <h1 className='mt-20'>Flask</h1>
         <p>API response: {data ? data.message : 'Loading...'}</p>
     </div>
   );
