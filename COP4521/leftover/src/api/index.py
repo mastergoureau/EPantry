@@ -10,8 +10,9 @@ def hello_world():
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
+    print("GET request received")
     data = {"message": "Hello from Flask!"}
     return jsonify(data)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=5000)
