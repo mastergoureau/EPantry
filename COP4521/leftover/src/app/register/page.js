@@ -10,7 +10,7 @@ const RegisterPage = () => {
     lastName: '',
     email: '',
     username: '',
-    password: '',
+    password: ''
   });
 
 

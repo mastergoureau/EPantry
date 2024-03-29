@@ -11,9 +11,14 @@ export default function Home() {
               We also track expiration dates and will notify you when your food is about to expire so you can cook it before it goes bad.
               Also, Chef's can post their own recipies and have them be searchable by our users. 
             </p>
-            <Link href="/register">
+            <Link href="/login">
             <button className="bg-primary hover:bg-secondary hover:text-primary text-muted font-bold py-2 px-4 rounded">
                 Get Started Today!
+            </button>
+            </Link>
+            <Link href="/flask">
+            <button className="bg-primary hover:bg-secondary hover:text-primary text-muted font-bold py-2 px-4 rounded mx-2">
+                Test the Flask
             </button>
             </Link>
           </div>
