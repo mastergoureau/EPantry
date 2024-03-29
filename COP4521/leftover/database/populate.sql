@@ -1,7 +1,7 @@
 INSERT INTO Roles(role_name, role_id) VALUES ('admin', 1), ('chef', 2), ('pleb', 3);
 
 
-INSERT INTO Food (food_name, food_type) VALUES
+INSERT INTO Foods(food_name, food_type) VALUES
 ('Apple','Fruit'),
 ('Apricot', 'Fruit'),
 ('Blackberries','Fruit'),
@@ -31,7 +31,6 @@ INSERT INTO Food (food_name, food_type) VALUES
 ('Mandarin','Fruit'),
 ('Mango','Fruit'),
 ('Nectarine','Fruit'),
-('Orange','Fruit'),
 ('Blood Orange', 'Fruit'),
 ('Papaya','Fruit'),
 ('Passion Fruit', 'Fruit'),
@@ -657,5 +656,5 @@ INSERT INTO Food (food_name, food_type) VALUES
 INSERT INTO Users (email_address, username, first_name, last_name, user_password) VALUES 
 ('no21b@fsu.edu','no21b','Nolan','ORourke','123');
 
-INSERT INTO User_Roles (role_id) VALUES ('1');
-GRANT ALL PRIVILEGES On ALL TABLES IN TO no21b 
+-- INSERT INTO User_Roles (role_id) VALUES ('1');
+-- GRANT ALL PRIVILEGES On ALL TABLES IN TO no21b 

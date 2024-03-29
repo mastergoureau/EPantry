@@ -20,28 +20,33 @@ def connect():
         db_version = cur.fetchone()
         print(db_version)
 
-        with open('create.sql', 'r') as databasefile:
-            commands = databasefile.read().split(';')
+        sql_files = ['create.sql', 'populate.sql']
 
-            for command in commands:
-                try:
-                    if not command.strip() or command.strip().startswith('--'):
-                        continue
-                    cur.execute(command)
-                except Exception as E:
-                    print("Error executing command: ", command)
-                    print("Error message: ", E)
-                    connection.rollback()
-                    break
+        for filename in sql_files:
+            with open(filename, 'r') as databasefile:
+                commands = databasefile.read().split(';')
 
-            connection.commit()
+                for command in commands:
+                    try:
+                        if not command.strip() or command.strip().startswith('--'):
+                            continue
+                        cur.execute(command)
+                    except Exception as E:
+                        print("Error executing command: ", command)
+                        print("Error message: ", E)
+                        connection.rollback()
+                        break
 
-            cur.close()
-            connection.close()
-       
+                connection.commit()
+
+                # cur.close()
+                # connection.close()
     except(Exception, psycopg2.DatabaseError) as dberror:
         print(dberror)
     finally:
+        if cur is not None:
+            cur.close()
+
         if connection is not None:
             connection.close()
             print('Database connection terminated')

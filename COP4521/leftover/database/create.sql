@@ -23,8 +23,9 @@ CREATE TABLE User_Roles(
 
 DROP TABLE IF EXISTS Foods;
 CREATE TABLE Foods(
-    food_name VARCHAR(255) PRIMARY KEY,
-    food_type VARCHAR(255) NOT NULL
+    food_name VARCHAR(255) NOT NULL,
+    food_type VARCHAR(255) NOT NULL,
+    PRIMARY KEY (food_name, food_type)
 );
 
 DROP TABLE IF EXISTS Recipes;
