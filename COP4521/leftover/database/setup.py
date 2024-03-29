@@ -28,44 +28,17 @@ def connect():
                     if not command.strip() or command.strip().startswith('--'):
                         continue
                     cur.execute(command)
-                except Exeception as E:
-                    print("Error executing command: %s", command)
+                except Exception as E:
+                    print("Error executing command: ", command)
                     print("Error message: ", E)
+                    connection.rollback()
+                    break
 
             connection.commit()
+
             cur.close()
             connection.close()
-        # #Users
-        # cur.execute('CREATE TABLE Users(\
-        #             username SERIAL PRIMARY KEY,\
-        #             first_name VARCHAR(255) NOT NULL,\
-        #             last_name VARCHAR(255) NOT NULL,\
-        #             email_address VARCHAR(255) NOT NULL,\
-        #             user_password VARCHAR(255) NOT NULL);')
-        # print("Created Users Table...")
-
-        # #Food
-        # cur.execute("CREATE TABLE Foods(\
-        #             food_name VARCHAR(255) NOT NULL,\
-        #             food_type VARCHAR(255) NOT NULL);")
-        # print("Created Foods Table...")
-
-        # #Ingreidients
-        # cur.execute("CREATE TABLE Ingredients(\
-        #             ing_name VARCHAR(255) NOT NULL,\
-        #             quantity FLOAT(40,2) NOT NULL,\
-        #             measurement varchar(8) NULL\
-        #             FOREIGN KEY (food_name) REFERENCES Food(food_name));")
-        # print("Created Ingredients Table...")
-
-        # #Recipes
-        # cur.execute("CREATE TABLE Recipes(\
-        #             recipe_id SERIAL PRIMARY KEY,\
-        #             recipe_name VARCHAR(255),\
-        #             time_added DATE NOT NULL);")
-        # print("Created Recipes Table...")
-
-        # cur.close()
+       
     except(Exception, psycopg2.DatabaseError) as dberror:
         print(dberror)
     finally:
@@ -75,3 +48,4 @@ def connect():
 
 if __name__ == "__main__":
     connect()
+    print("Everything worked")
