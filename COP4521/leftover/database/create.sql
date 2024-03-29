@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Users CASCADE;
 CREATE TABLE Users(
     username VARCHAR(255) PRIMARY KEY,
     email_address VARCHAR(255) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE Users(
     user_password VARCHAR(255) NOT NULL
 );
 
-DROP TABLE IF EXISTS Roles;
+DROP TABLE IF EXISTS Roles CASCADE;
 CREATE TABLE Roles(
     role_id SERIAL PRIMARY KEY,
     role_name VARCHAR(20) NOT NULL
@@ -21,14 +21,13 @@ CREATE TABLE User_Roles(
     FOREIGN KEY (role_id) REFERENCES Roles(role_id)
 );
 
-DROP TABLE IF EXISTS Foods;
+DROP TABLE IF EXISTS Foods CASCADE;
 CREATE TABLE Foods(
-    food_name VARCHAR(255) NOT NULL,
-    food_type VARCHAR(255) NOT NULL,
-    PRIMARY KEY (food_name, food_type)
+    food_name VARCHAR(255) PRIMARY KEY,
+    food_type VARCHAR(255) NOT NULL
 );
 
-DROP TABLE IF EXISTS Recipes;
+DROP TABLE IF EXISTS Recipes CASCADE;
 CREATE TABLE Recipes(
     recipe_id SERIAL PRIMARY KEY,
     recipe_name VARCHAR(255),
@@ -37,7 +36,7 @@ CREATE TABLE Recipes(
     FOREIGN KEY (author) REFERENCES Users(username)
 );
 
-DROP TABLE IF EXISTS Recipe_Foods;
+DROP TABLE IF EXISTS Recipe_Foods CASCADE;
 CREATE TABLE Recipe_Foods(
     recipe_id SERIAL,
     food_name VARCHAR(255) NOT NULL,
@@ -46,7 +45,7 @@ CREATE TABLE Recipe_Foods(
     FOREIGN KEY (food_name) REFERENCES Foods(food_name)
 );
 
-DROP TABLE IF EXISTS Recipe_Ingredients;
+DROP TABLE IF EXISTS Recipe_Ingredients CASCADE;
 CREATE TABLE Recipe_Ingredients(
     recipe_id SERIAL ,
     ing_name VARCHAR(255) NOT NULL,
@@ -56,7 +55,7 @@ CREATE TABLE Recipe_Ingredients(
     FOREIGN KEY (ing_name) REFERENCES Recipe_Foods(food_name)
 );
 
-DROP TABLE IF EXISTS Steps;
+DROP TABLE IF EXISTS Steps CASCADE;
 CREATE TABLE Steps(
     step_id SERIAL PRIMARY KEY,
     recipe_id SERIAL,
@@ -65,14 +64,14 @@ CREATE TABLE Steps(
     FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id)
 );
 
-DROP TABLE IF EXISTS Pantry;
+DROP TABLE IF EXISTS Pantry CASCADE;
 CREATE TABLE Pantry(
     pantry_id SERIAL PRIMARY KEY,
     ownername VARCHAR(255),
     FOREIGN KEY (ownername) REFERENCES Users(username)
 );
 
-DROP TABLE IF EXISTS Pantry_Food;
+DROP TABLE IF EXISTS Pantry_Food CASCADE;
 CREATE TABLE Pantry_Food(
     pantry_id SERIAL,
     food_name VARCHAR(255),
@@ -81,7 +80,7 @@ CREATE TABLE Pantry_Food(
     FOREIGN KEY (food_name) REFERENCES Foods(food_name)
 );
 
-DROP TABLE IF EXISTS Pantry_Ingredients;
+DROP TABLE IF EXISTS Pantry_Ingredients CASCADE;
 CREATE TABLE Pantry_Ingredients(
     pantry_id SERIAL,
     ing_name VARCHAR(255) NOT NULL,
