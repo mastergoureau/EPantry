@@ -147,7 +147,12 @@ const UserPage = () => {
           ))}
         </ul>
       </div>
-      <div style={{ flex: 1, marginLeft: '20px', padding: '1rem' }}>
+      <div style={{ flexBasis: '20%',
+        overflow: 'hidden',
+        margin: '0 20px',
+        height: 'calc(100vh - 0px)',
+        paddingTop: '80px',
+        paddingBottom: '180px', }}>
       <h2>Available Recipes</h2>
       <ul style={{ listStyleType: 'none', padding: 0 }}>
         {availableRecipes.map((recipe, index) => (
