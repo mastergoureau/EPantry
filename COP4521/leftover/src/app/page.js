@@ -16,11 +16,6 @@ export default function Home() {
                 Get Started Today!
             </button>
             </Link>
-            <Link href="/flask">
-            <button className="bg-primary hover:bg-secondary hover:text-primary text-muted font-bold py-2 px-4 rounded mx-2">
-                Test the Flask
-            </button>
-            </Link>
           </div>
         </div>
       <Image src="/PANTRY.jpg" width={500} height={400} className="w-1/2 h-full lg:block hidden"/>

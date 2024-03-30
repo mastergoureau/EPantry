@@ -1,6 +1,15 @@
-INSERT INTO Roles(role_name, role_id) VALUES ('admin', 1), ('chef', 2), ('pleb', 3);
+INSERT INTO Roles (role_id, role_name)
+VALUES (1, 'admin'), (2, 'chef'), (3, 'pleb')
+ON CONFLICT (role_id) 
+DO NOTHING;
 
-INSERT INTO Users(username, email_address, first_name, last_name, user_password) VALUES ('no21b','no21b@fsu.edu','Nolan','ORourke','123');
+INSERT INTO Users(username, email_address, first_name, last_name, user_password)
+VALUES ('no21b', 'no21b@fsu.edu', 'Nolan', 'ORourke', '123')
+ON CONFLICT (username) 
+DO NOTHING;
+
+INSERT INTO Recipes (recipe_name, time_added, author) 
+VALUES ('Tomato Basil Pasta', CURRENT_DATE, 'no21b');
 
 INSERT INTO Foods(food_name, food_type) VALUES
 ('Apple','Fruit'),
@@ -633,7 +642,9 @@ INSERT INTO Foods(food_name, food_type) VALUES
 ('Baking Soda', 'Other'),
 ('Cornstarch','Other'),
 ('Gelatin','Other'),
-('Vanilla Extract','Other');
+('Vanilla Extract','Other')
+ON CONFLICT (food_name) 
+DO NOTHING;;
 -- With these ingredients, we want to ensure that the chef has a search/drop down feature where they can add these items to their recipe when adding it
 -- We also want to make sure that we the pantry is up for when the user creates their account, we want to provide the same feature to them 
 

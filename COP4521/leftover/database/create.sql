@@ -67,26 +67,26 @@ CREATE TABLE Steps(
 DROP TABLE IF EXISTS Pantry CASCADE;
 CREATE TABLE Pantry(
     pantry_id SERIAL PRIMARY KEY,
-    ownername VARCHAR(255),
+    ownername VARCHAR(255) UNIQUE,
     FOREIGN KEY (ownername) REFERENCES Users(username)
 );
 
 DROP TABLE IF EXISTS Pantry_Food CASCADE;
-CREATE TABLE Pantry_Food(
-    pantry_id SERIAL,
+CREATE TABLE Pantry_Food (
+    pantry_food_id SERIAL PRIMARY KEY,
+    pantry_id INTEGER,
     food_name VARCHAR(255),
-    CONSTRAINT pantry_food_unique_food_name UNIQUE(food_name),
     FOREIGN KEY (pantry_id) REFERENCES Pantry(pantry_id),
-    FOREIGN KEY (food_name) REFERENCES Foods(food_name)
+    FOREIGN KEY (food_name) REFERENCES Foods(food_name),
+    UNIQUE (pantry_id, food_name) -- Ensures combination of pantry_id and food_name is unique
 );
 
 DROP TABLE IF EXISTS Pantry_Ingredients CASCADE;
 CREATE TABLE Pantry_Ingredients(
-    pantry_id SERIAL,
-    ing_name VARCHAR(255) NOT NULL,
+    pantry_ingredient_id SERIAL PRIMARY KEY,
+    pantry_food_id INTEGER,
     quantity FLOAT NOT NULL,
-    measurement VARCHAR(8) NULL,
-    FOREIGN KEY (pantry_id) REFERENCES Pantry(pantry_id),
-    FOREIGN KEY (ing_name) REFERENCES Pantry_Food(food_name)
+    measurement VARCHAR(8),
+    FOREIGN KEY (pantry_food_id) REFERENCES Pantry_Food(pantry_food_id)
 );
 
