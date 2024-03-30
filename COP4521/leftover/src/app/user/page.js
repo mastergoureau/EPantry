@@ -111,7 +111,7 @@ const UserPage = () => {
             placeholder="Search foods..."
             value={searchTerm}
             onChange={handleSearchChange}
-            style={{ width: '85%', padding: '10px', marginBottom: '20px' }}
+            style={{ width: '85%', padding: '10px', marginBottom: '20px',  border: '2px solid black' }}
           />
           <ul style={{ listStyleType: 'none', padding: 0 }}>
             {filteredFoods.map((food, index) => (

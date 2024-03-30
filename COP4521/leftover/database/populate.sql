@@ -661,18 +661,6 @@ VALUES
 (1, 'Salt'),
 (1, 'Pepper');
 
-INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALUES
-(1, 'Tomato', 2, 'cups'),
-(1, 'Basil', 0.5, 'cup'),
-(1, 'Gnocchi', 8, 'ounces'),
-(1, 'Olive Oil', 2, 'table'),
-(1, 'Garlic', 2, 'cloves'),
-(1, 'Salt', 1, 'teaspoon'),
-(1, 'Pepper', 0.5, 'teaspoon');
--- With these ingredients, we want to ensure that the chef has a search/drop down feature where they can add these items to their recipe when adding it
--- We also want to make sure that we the pantry is up for when the user creates their account, we want to provide the same feature to them 
-
-
 INSERT INTO Recipe_Foods (recipe_id, food_name)
 VALUES 
 (2, 'Penne'),
@@ -682,6 +670,14 @@ VALUES
 (2, 'Salt'),
 (2, 'Pepper');
 
+INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALUES
+(1, 'Tomato', 2, 'cups'),
+(1, 'Basil', 0.5, 'cup'),
+(1, 'Gnocchi', 8, 'ounces'),
+(1, 'Olive Oil', 2, 'table'),
+(1, 'Garlic', 2, 'cloves'),
+(1, 'Salt', 1, 'teaspoon'),
+(1, 'Pepper', 0.5, 'teaspoon');
 
 INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALUES
 (2, 'Penne', 2, 'cups'),
@@ -690,9 +686,6 @@ INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALU
 (2, 'Garlic', 2, 'cloves'),
 (2, 'Salt', 1, 'teaspoon'),
 (2, 'Pepper', 0.5, 'teaspoon');
-
--- INSERT INTO User_Roles (role_id) VALUES ('1');
--- GRANT ALL PRIVILEGES On ALL TABLES IN TO no21b 
 
 
 

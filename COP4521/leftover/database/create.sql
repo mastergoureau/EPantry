@@ -46,8 +46,8 @@ CREATE TABLE Recipe_Foods(
     UNIQUE (recipe_id, food_name) 
 );
 
-DROP TABLE IF EXISTS Recipe_Ingredients;
-CREATE TABLE Recipe_Ingredients (
+DROP TABLE IF EXISTS Recipe_Ingredients CASCADE;
+CREATE TABLE Recipe_Ingredients(
     recipe_ingredient_id SERIAL PRIMARY KEY,
     recipe_id INTEGER NOT NULL,
     ing_name VARCHAR(255) NOT NULL,
