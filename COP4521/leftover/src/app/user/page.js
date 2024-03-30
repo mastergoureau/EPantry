@@ -99,104 +99,106 @@ const UserPage = () => {
     setSearchTerm(e.target.value);
   };
 
-  // Filter foods based on the search term
   const filteredFoods = foods.filter(food =>
     food.food_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const sectionContainerStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '20px',
+    marginTop: '20px',
+    width: '100%',
+    flexWrap: 'wrap',
+  };
+
+  const sectionStyle = {
+    maxWidth: '300px',
+    width: '100%',
+    height: '400px', 
+    overflowY: 'auto', 
+    padding: '20px',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    borderRadius: '5px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  };
+
+  const inputStyle = {
+    width: 'calc(100% - 20px)',
+    padding: '10px',
+    marginBottom: '20px',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+  };
+
+  const itemStyle = {
+    backgroundColor: '#f9f9f9',
+    padding: '10px',
+    borderRadius: '5px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '10px', 
+  };
+
+  const buttonStyle = {
+    padding: '5px 10px',
+    fontSize: '12px',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    backgroundColor: '#4CAF50',
+    color: 'white',
+    transition: 'background-color 0.3s',
+  };
+
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      <div style={{
-        flexBasis: '20%',
-        overflow: 'hidden',
-        margin: '0 20px',
-        height: 'calc(100vh - 0px)',
-        paddingTop: '0px',
-        paddingBottom: '180px',
-      }}>
-        <div style={{
-          height: 'calc(100% + 100px)',
-          marginTop: '80px',
-          marginBottom: '10px',
-          overflowY: 'auto',
-        }}>
-          <h2>Available Foods</h2>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', marginTop: '50px' }}>
+      <div style={sectionContainerStyle}>
+        <div style={sectionStyle}>
+          <h2>Ingredients</h2>
           <input
             type="text"
             placeholder="Search foods..."
             value={searchTerm}
             onChange={handleSearchChange}
-            style={{ width: '85%', padding: '10px', marginBottom: '20px',  border: '2px solid black' }}
+            style={inputStyle}
           />
-          <ul style={{ listStyleType: 'none', padding: 0 }}>
+          <div style={{ overflowY: 'auto' }}>
             {filteredFoods.map((food, index) => (
-              <li key={index} style={{ padding: '0.5rem 0' }}>
+              <div key={index} style={itemStyle}>
                 {food.food_name}
-                <button onClick={() => addToPantry(food.food_name)} style={{
-                    padding: '5px 10px',
-                    fontSize: '12px',
-                    margin: '0 10px',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    backgroundColor: '#4CAF50',
-                    color: 'white',
-                    transition: 'background-color 0.3s',
-                  }} 
-                  onMouseOver={(e) => e.target.style.backgroundColor = '#45a049'}
-                  onMouseOut={(e) => e.target.style.backgroundColor = '#4CAF50'}>
-                  Add to Pantry
-                </button>
-              </li>
+                <button onClick={() => addToPantry(food.food_name)} style={buttonStyle}>Add to Pantry</button>
+              </div>
             ))}
-          </ul>
+          </div>
+        </div>
+
+        <div style={sectionStyle}>
+          <h2>My Pantry</h2>
+          <div style={{ overflowY: 'auto' }}>
+            {pantryItems.map((item, index) => (
+              <div key={index} style={itemStyle}>
+                {item.food_name}
+                <button onClick={() => removeFromPantry(item.food_name)} style={{ ...buttonStyle, backgroundColor: '#f44336' }}>Remove</button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={sectionStyle}>
+          <h2>Available Recipes</h2>
+          <div style={{ overflowY: 'auto' }}>
+            {availableRecipes.map((recipe, index) => (
+              <div key={index} style={{ ...itemStyle, cursor: 'pointer', color: 'blue' }} onClick={() => selectRecipe(recipe.recipe_id)}>
+                {recipe.recipe_name}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      <div style={{ flexBasis: '20%',
-        overflow: 'hidden',
-        height: 'calc(100vh - 0px)',
-        paddingTop: '80px',
-        paddingBottom: '120px',
-        marginLeft: '20px' }}>
-        <h2>My Pantry</h2>
-        <ul style={{ listStyleType: 'none', padding: 0 }}>
-          {pantryItems.map((item, index) => (
-            <li key={index} style={{ padding: '0.5rem 0' }}>
-              {item.food_name}
-              <button onClick={() => removeFromPantry(item.food_name)} style={{
-                    padding: '5px 10px',
-                    fontSize: '12px',
-                    margin: '0 10px',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    backgroundColor: '#f44336',
-                    color: 'white',
-                    transition: 'background-color 0.3s',
-                  }} onMouseOver={(e) => e.target.style.backgroundColor = '#d32f2f'}
-                  onMouseOut={(e) => e.target.style.backgroundColor = '#f44336'}>
-                  Remove from Pantry
-                </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div style={{ flexBasis: '20%',
-        overflow: 'hidden',
-        margin: '0 20px',
-        height: 'calc(100vh - 0px)',
-        paddingTop: '80px',
-        paddingBottom: '180px', }}>
-      <h2>Available Recipes</h2>
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
-      {availableRecipes.map((recipe, index) => (
-        <li key={index} style={{ padding: '0.5rem 0', cursor: 'pointer', color: 'blue' }}
-            onClick={() => selectRecipe(recipe.recipe_id)}>
-          {recipe.recipe_name}
-          </li>
-        ))}
-  </ul>
-</div>
     </div>
   );
 };
