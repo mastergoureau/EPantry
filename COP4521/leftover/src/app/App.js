@@ -16,6 +16,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/user" element={<UserPage />} />
+          <Route path="/recipe" element={<RegisterPage />} />
           {/* Define other routes as needed */}
         </Routes>
       </div>

@@ -198,10 +198,48 @@ def get_available_recipes():
     finally:
         cur.close()
         conn.close()
+@app.route('/select_recipe/<int:recipe_id>', methods=['POST'])
+def select_recipe(recipe_id):
+    print("Selecting recipe ID:", recipe_id)  # Debug print
+    if 'username' in session:
+        session['selected_recipe_id'] = recipe_id
+        print("Recipe selected successfully, ID stored in session:", session['selected_recipe_id'])  # Confirm success
+        return jsonify({'success': True}), 200
+    else:
+        print("Failed to select recipe, no username in session")  # Identify failure
+        return jsonify({'error': 'Unauthorized'}), 401
+@app.route('/recipe', methods=['GET'])
+def get_recipe_details():
+    if 'username' not in session or 'selected_recipe_id' not in session:
+        return jsonify({'error': 'No recipe selected or unauthorized'}), 401
 
+    recipe_id = session['selected_recipe_id']
+    conn = get_db_connection()
+    cur = conn.cursor()
 
+    try:
+        # Fetch recipe details
+        cur.execute("SELECT recipe_name FROM Recipes WHERE recipe_id = %s", (recipe_id,))
+        recipe_name = cur.fetchone()
 
+        # Corrected Query: Using `ing_name` instead of `food_name`
+        cur.execute("SELECT ing_name, quantity, measurement FROM Recipe_Ingredients WHERE recipe_id = %s", (recipe_id,))
+        ingredients = cur.fetchall()
 
+        recipe_details = {
+            'recipe_name': recipe_name[0] if recipe_name else 'Recipe Not Found',
+            'ingredients': [{'food_name': ing[0], 'quantity': ing[1], 'measurement': ing[2]} for ing in ingredients]
+        }
+
+        return jsonify(recipe_details)
+
+    except Exception as e:
+        print(f"Error fetching recipe details: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+
+    finally:
+        cur.close()
+        conn.close()
 
 
 

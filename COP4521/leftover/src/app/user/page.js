@@ -48,6 +48,21 @@ const UserPage = () => {
     fetchPantryItems();
     fetchAvailableRecipes(); 
   }, [fetchPantryItems, fetchAvailableRecipes]);
+  
+  function selectRecipe(recipeId) {
+    fetch(`http://localhost:5000/select_recipe/${recipeId}`, {
+      method: 'POST', // Assuming you're updating to use POST to match session handling
+      credentials: 'include', // Important for sessions
+    })
+    .then(response => {
+      if(response.ok) {
+        // Navigate to the generic /recipe URL after successful selection
+        window.location.href = '/recipe';
+      } else {
+        alert("Failed to select recipe");
+      }
+    });
+  }
 
   const addToPantry = async (foodName) => {
     const response = await fetch('http://localhost:5000/pantry/add', {
@@ -174,9 +189,10 @@ const UserPage = () => {
         paddingBottom: '180px', }}>
       <h2>Available Recipes</h2>
       <ul style={{ listStyleType: 'none', padding: 0 }}>
-        {availableRecipes.map((recipe, index) => (
-          <li key={index} style={{ padding: '0.5rem 0' }}>
-            {recipe.recipe_name}
+      {availableRecipes.map((recipe, index) => (
+        <li key={index} style={{ padding: '0.5rem 0', cursor: 'pointer', color: 'blue' }}
+            onClick={() => selectRecipe(recipe.recipe_id)}>
+          {recipe.recipe_name}
           </li>
         ))}
   </ul>
