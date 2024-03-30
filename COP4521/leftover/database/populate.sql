@@ -11,6 +11,7 @@ DO NOTHING;
 INSERT INTO Recipes (recipe_name, time_added, author) 
 VALUES ('Tomato Basil Pasta', CURRENT_DATE, 'no21b');
 
+
 INSERT INTO Foods(food_name, food_type) VALUES
 ('Apple','Fruit'),
 ('Apricot', 'Fruit'),

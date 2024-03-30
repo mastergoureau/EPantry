@@ -5,6 +5,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 const UserPage = () => {
   const [foods, setFoods] = useState([]);
   const [pantryItems, setPantryItems] = useState([]);
+  const [availableRecipes, setAvailableRecipes] = useState([]);
 
   const fetchPantryItems = useCallback(async () => {
     const response = await fetch('http://localhost:5000/pantry/items', {
@@ -15,6 +16,17 @@ const UserPage = () => {
       setPantryItems(data);
     } else {
       console.error('Failed to fetch pantry items');
+    }
+  }, []);
+  const fetchAvailableRecipes = useCallback(async () => {
+    const response = await fetch('http://localhost:5000/recipes/available', {
+      credentials: 'include',
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setAvailableRecipes(data);
+    } else {
+      console.error('Failed to fetch available recipes');
     }
   }, []);
 
@@ -34,7 +46,7 @@ const UserPage = () => {
     fetchFoods();
     fetchPantryItems();
     fetchAvailableRecipes(); 
-  }, [fetchPantryItems]);
+  }, [fetchPantryItems, fetchAvailableRecipes]);
 
   const addToPantry = async (foodName) => {
     const response = await fetch('http://localhost:5000/pantry/add', {
@@ -71,6 +83,7 @@ const UserPage = () => {
       <div style={{
         flexBasis: '20%',
         overflow: 'hidden',
+        margin: '0 20px',
         height: 'calc(100vh - 0px)',
         paddingTop: '0px',
         paddingBottom: '180px',
@@ -85,7 +98,7 @@ const UserPage = () => {
           <ul style={{ listStyleType: 'none', padding: 0 }}>
             {foods.map((food, index) => (
               <li key={index} style={{ padding: '0.5rem 0' }}>
-                {food.food_name} - {food.food_type}
+                {food.food_name}
                 <button onClick={() => addToPantry(food.food_name)} style={{
                     padding: '5px 10px',
                     fontSize: '12px',
