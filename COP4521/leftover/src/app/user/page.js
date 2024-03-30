@@ -6,6 +6,7 @@ const UserPage = () => {
   const [foods, setFoods] = useState([]);
   const [pantryItems, setPantryItems] = useState([]);
   const [availableRecipes, setAvailableRecipes] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(''); // State to hold the search term
 
   const fetchPantryItems = useCallback(async () => {
     const response = await fetch('http://localhost:5000/pantry/items', {
@@ -58,6 +59,7 @@ const UserPage = () => {
 
     if (response.ok) {
       fetchPantryItems();
+      fetchAvailableRecipes();
     } else {
       console.error('Failed to add food to pantry');
     }
@@ -73,10 +75,19 @@ const UserPage = () => {
 
     if (response.ok) {
       fetchPantryItems();
+      fetchAvailableRecipes();
     } else {
       console.error('Failed to remove food from pantry');
     }
   };
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Filter foods based on the search term
+  const filteredFoods = foods.filter(food =>
+    food.food_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
@@ -95,8 +106,15 @@ const UserPage = () => {
           overflowY: 'auto',
         }}>
           <h2>Available Foods</h2>
+          <input
+            type="text"
+            placeholder="Search foods..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            style={{ width: '85%', padding: '10px', marginBottom: '20px' }}
+          />
           <ul style={{ listStyleType: 'none', padding: 0 }}>
-            {foods.map((food, index) => (
+            {filteredFoods.map((food, index) => (
               <li key={index} style={{ padding: '0.5rem 0' }}>
                 {food.food_name}
                 <button onClick={() => addToPantry(food.food_name)} style={{
@@ -109,7 +127,8 @@ const UserPage = () => {
                     backgroundColor: '#4CAF50',
                     color: 'white',
                     transition: 'background-color 0.3s',
-                  }} onMouseOver={(e) => e.target.style.backgroundColor = '#45a049'}
+                  }} 
+                  onMouseOver={(e) => e.target.style.backgroundColor = '#45a049'}
                   onMouseOut={(e) => e.target.style.backgroundColor = '#4CAF50'}>
                   Add to Pantry
                 </button>

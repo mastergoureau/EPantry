@@ -19,11 +19,9 @@ def get_user_info(username):
     conn = get_db_connection()
     cur = conn.cursor()
     try:
-        # Assuming you have a table named 'Users' with the columns 'username', 'first_name', 'last_name', and 'email_address'
         cur.execute("SELECT username, first_name, last_name, email_address FROM Users WHERE username = %s", (username,))
         user = cur.fetchone()
         if user:
-            # Convert the tuple returned from fetchone() into a dictionary
             user_info = {
                 'username': user[0],
                 'firstName': user[1],
@@ -39,7 +37,6 @@ def get_user_info(username):
     finally:
         cur.close()
         conn.close()
-
 @app.route('/foods', methods=['GET'])
 def get_foods():
     conn = get_db_connection()
@@ -49,7 +46,6 @@ def get_foods():
     cur.close()
     conn.close()
     return jsonify([{'food_name': food[0], 'food_type': food[1]} for food in foods])
-
 @app.route('/pantry/items', methods=['GET'])
 def get_pantry_items():
     if 'username' not in session:
@@ -73,7 +69,6 @@ def get_pantry_items():
     finally:
         cur.close()
         conn.close()
-
 @app.route('/recipes', methods=['GET'])
 def get_recipes():
     conn = get_db_connection()
@@ -112,7 +107,6 @@ def add_to_pantry():
     finally:
         cur.close()
         conn.close()
-
 @app.route('/pantry/remove', methods=['POST'])
 def remove_from_pantry():
     if 'username' not in session:
@@ -142,57 +136,6 @@ def remove_from_pantry():
     except Exception as e:
         conn.rollback()
         return jsonify({'error': str(e)}), 500
-    finally:
-        cur.close()
-        conn.close()
-@app.route('/login', methods=['POST'])
-def login_user():
-    conn = get_db_connection()
-    cur = conn.cursor()
-    # Extract form data from the request
-    data = request.json
-    try:
-        # Check if the username exists
-        cur.execute("SELECT * FROM Users WHERE username = %s", (data['username'],))
-        existing_user = cur.fetchone()
-        print(data)
-        if existing_user:
-            # Check if the password is correct
-            if existing_user[4] == data['password']:
-                session['username'] = data['username']
-                return {'message': 'Login successful', 'username': data['username']}, 200
-            else:
-                return {'message': 'Incorrect password'}, 401  # Unauthorized
-        else:
-            return {'message': 'User not found'}, 404  # Not Found
-    except Exception as e:
-        return {'message': 'Internal Server Error', 'error': str(e)}, 500  # Internal Server Error
-    finally:
-        cur.close()
-        conn.close()
-
-@app.route('/register', methods=['POST'])
-def register_user():
-    conn = get_db_connection()
-    cur = conn.cursor()
-    # Extract form data from the request
-    data = request.json
-    try:
-        cur.execute(
-            "INSERT INTO Users (username, email_address, first_name, last_name, user_password) VALUES (%s, %s, %s, %s, %s)",
-            (data['username'], data['email'], data['firstName'], data['lastName'], data['password']))
-        cur.execute(
-            "INSERT INTO User_Roles (user_id, role_id) VALUES (%s,%s)", (data['username'],3))
-        cur.execute(
-            "INSERT INTO Pantry (ownername) VALUES (%s)",
-            (data['username'],)
-        )
-        conn.commit()
-        session['username'] = data['username']
-        return {'message': 'User created successfully', 'username': data['username']}, 201
-    except Exception as e:
-        conn.rollback()
-        return {'Error': str(e)}, 500
     finally:
         cur.close()
         conn.close()
@@ -231,19 +174,20 @@ def get_available_recipes():
     
     try:
         cur.execute("""
-        SELECT r.recipe_id, r.recipe_name 
-        FROM Recipes r 
+        SELECT r.recipe_id, r.recipe_name
+        FROM Recipes r
         WHERE NOT EXISTS (
-            SELECT 1 
-            FROM Recipe_Ingredients ri 
-            WHERE ri.recipe_id = r.recipe_id 
+            SELECT 1
+            FROM Recipe_Ingredients ri
+            WHERE ri.recipe_id = r.recipe_id
             AND NOT EXISTS (
-                SELECT 1 
-                FROM Pantry_Food pf 
-                JOIN Pantry p ON pf.pantry_id = p.pantry_id 
+                SELECT 1
+                FROM Pantry_Food pf
+                INNER JOIN Pantry p ON pf.pantry_id = p.pantry_id
                 WHERE p.ownername = %s AND pf.food_name = ri.ing_name
             )
         )
+
         """, (username,))
         
         recipes = [{'recipe_id': row[0], 'recipe_name': row[1]} for row in cur.fetchall()]
@@ -255,6 +199,67 @@ def get_available_recipes():
         cur.close()
         conn.close()
 
+
+
+
+
+
+
+
+
+
+
+# This is our pages for which we need the users to stay on
+@app.route('/login', methods=['POST'])
+def login_user():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    # Extract form data from the request
+    data = request.json
+    try:
+        # Check if the username exists
+        cur.execute("SELECT * FROM Users WHERE username = %s", (data['username'],))
+        existing_user = cur.fetchone()
+        print(data)
+        if existing_user:
+            # Check if the password is correct
+            if existing_user[4] == data['password']:
+                session['username'] = data['username']
+                return {'message': 'Login successful', 'username': data['username']}, 200
+            else:
+                return {'message': 'Incorrect password'}, 401  # Unauthorized
+        else:
+            return {'message': 'User not found'}, 404  # Not Found
+    except Exception as e:
+        return {'message': 'Internal Server Error', 'error': str(e)}, 500  # Internal Server Error
+    finally:
+        cur.close()
+        conn.close()
+@app.route('/register', methods=['POST'])
+def register_user():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    # Extract form data from the request
+    data = request.json
+    try:
+        cur.execute(
+            "INSERT INTO Users (username, email_address, first_name, last_name, user_password) VALUES (%s, %s, %s, %s, %s)",
+            (data['username'], data['email'], data['firstName'], data['lastName'], data['password']))
+        cur.execute(
+            "INSERT INTO User_Roles (user_id, role_id) VALUES (%s,%s)", (data['username'],3))
+        cur.execute(
+            "INSERT INTO Pantry (ownername) VALUES (%s)",
+            (data['username'],)
+        )
+        conn.commit()
+        session['username'] = data['username']
+        return {'message': 'User created successfully', 'username': data['username']}, 201
+    except Exception as e:
+        conn.rollback()
+        return {'Error': str(e)}, 500
+    finally:
+        cur.close()
+        conn.close()
 @app.route('/user', methods=['GET'])
 def welcome_user():  # Removed the username parameter
     # First, check if the user is logged in by looking in the session.
@@ -270,10 +275,5 @@ def welcome_user():  # Removed the username parameter
         return jsonify(user_info)
     else:
         return jsonify({'error': 'User not found'}), 404
-
-@app.route('/pantry/<user>', methods=['GET', 'POST'])
-def display_pantry(user):
-    return
-
 if __name__ == '__main__':
     app.run(debug=True)

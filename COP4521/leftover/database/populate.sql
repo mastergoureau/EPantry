@@ -8,11 +8,6 @@ VALUES ('no21b', 'no21b@fsu.edu', 'Nolan', 'ORourke', '123')
 ON CONFLICT (username) 
 DO NOTHING;
 
-INSERT INTO Recipes (recipe_name, time_added, author) 
-VALUES ('Tomato Basil Pasta', CURRENT_DATE, 'no21b');
-
-INSERT INTO Recipes (recipe_name, time_added, author) 
-VALUES ('Sphagetti Bolognese', CURRENT_DATE, 'no21b');
 
 
 INSERT INTO Foods(food_name, food_type) VALUES
@@ -648,11 +643,56 @@ INSERT INTO Foods(food_name, food_type) VALUES
 ('Gelatin','Other'),
 ('Vanilla Extract','Other')
 ON CONFLICT (food_name) 
-DO NOTHING;;
+DO NOTHING;
+
+INSERT INTO Recipes (recipe_name, time_added, author) 
+VALUES ('Tomato Basil Pasta', CURRENT_DATE, 'no21b');
+
+INSERT INTO Recipes (recipe_name, time_added, author) 
+VALUES ('Sphagetti Bolognese', CURRENT_DATE, 'no21b');
+
+INSERT INTO Recipe_Foods (recipe_id, food_name)
+VALUES
+(1, 'Tomato'),
+(1, 'Basil'),
+(1, 'Gnocchi'),
+(1, 'Olive Oil'),
+(1, 'Garlic'),
+(1, 'Salt'),
+(1, 'Pepper');
+
+INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALUES
+(1, 'Tomato', 2, 'cups'),
+(1, 'Basil', 0.5, 'cup'),
+(1, 'Gnocchi', 8, 'ounces'),
+(1, 'Olive Oil', 2, 'table'),
+(1, 'Garlic', 2, 'cloves'),
+(1, 'Salt', 1, 'teaspoon'),
+(1, 'Pepper', 0.5, 'teaspoon');
 -- With these ingredients, we want to ensure that the chef has a search/drop down feature where they can add these items to their recipe when adding it
 -- We also want to make sure that we the pantry is up for when the user creates their account, we want to provide the same feature to them 
 
 
+INSERT INTO Recipe_Foods (recipe_id, food_name)
+VALUES 
+(2, 'Penne'),
+(2, 'Salted Beef'),
+(2, 'Olive Oil'),
+(2, 'Garlic'),
+(2, 'Salt'),
+(2, 'Pepper');
+
+
+INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALUES
+(2, 'Penne', 2, 'cups'),
+(2, 'Salted Beef', 0.5, 'cup'),
+(2, 'Olive Oil', 2, 'table'),
+(2, 'Garlic', 2, 'cloves'),
+(2, 'Salt', 1, 'teaspoon'),
+(2, 'Pepper', 0.5, 'teaspoon');
 
 -- INSERT INTO User_Roles (role_id) VALUES ('1');
 -- GRANT ALL PRIVILEGES On ALL TABLES IN TO no21b 
+
+
+

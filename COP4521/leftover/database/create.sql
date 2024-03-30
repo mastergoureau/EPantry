@@ -38,21 +38,23 @@ CREATE TABLE Recipes(
 
 DROP TABLE IF EXISTS Recipe_Foods CASCADE;
 CREATE TABLE Recipe_Foods(
-    recipe_id SERIAL,
+    recipe_food_id SERIAL PRIMARY KEY,
+    recipe_id INTEGER NOT NULL,
     food_name VARCHAR(255) NOT NULL,
-    CONSTRAINT recipe_foods_unique_food_name UNIQUE (food_name),
     FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id),
-    FOREIGN KEY (food_name) REFERENCES Foods(food_name)
+    FOREIGN KEY (food_name) REFERENCES Foods(food_name),
+    UNIQUE (recipe_id, food_name) 
 );
 
-DROP TABLE IF EXISTS Recipe_Ingredients CASCADE;
-CREATE TABLE Recipe_Ingredients(
-    recipe_id SERIAL ,
+DROP TABLE IF EXISTS Recipe_Ingredients;
+CREATE TABLE Recipe_Ingredients (
+    recipe_ingredient_id SERIAL PRIMARY KEY,
+    recipe_id INTEGER NOT NULL,
     ing_name VARCHAR(255) NOT NULL,
     quantity FLOAT NOT NULL,
-    measurement varchar(8) NULL,
+    measurement VARCHAR(8),
     FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id),
-    FOREIGN KEY (ing_name) REFERENCES Recipe_Foods(food_name)
+    FOREIGN KEY (ing_name) REFERENCES Foods(food_name)
 );
 
 DROP TABLE IF EXISTS Steps CASCADE;
