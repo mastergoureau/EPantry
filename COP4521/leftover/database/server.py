@@ -218,17 +218,38 @@ def get_recipe_details():
     cur = conn.cursor()
 
     try:
-        # Fetch recipe details
-        cur.execute("SELECT recipe_name FROM Recipes WHERE recipe_id = %s", (recipe_id,))
-        recipe_name = cur.fetchone()
+        # Fetch recipe details along with the author's name
+        cur.execute("""
+        SELECT r.recipe_name, u.first_name, u.last_name, r.time_added
+        FROM Recipes r
+        JOIN Users u ON r.author = u.username
+        WHERE r.recipe_id = %s
+        """, (recipe_id,))
+        recipe = cur.fetchone()
 
-        # Corrected Query: Using `ing_name` instead of `food_name`
-        cur.execute("SELECT ing_name, quantity, measurement FROM Recipe_Ingredients WHERE recipe_id = %s", (recipe_id,))
+        # Fetch ingredients for the selected recipe
+        cur.execute("""
+        SELECT ing_name, quantity, measurement
+        FROM Recipe_Ingredients
+        WHERE recipe_id = %s
+        """, (recipe_id,))
         ingredients = cur.fetchall()
 
+        # Fetch steps for the selected recipe
+        cur.execute("""
+        SELECT step_number, step_description
+        FROM Steps
+        WHERE recipe_id = %s
+        ORDER BY step_number
+        """, (recipe_id,))
+        steps = cur.fetchall()
+
         recipe_details = {
-            'recipe_name': recipe_name[0] if recipe_name else 'Recipe Not Found',
-            'ingredients': [{'food_name': ing[0], 'quantity': ing[1], 'measurement': ing[2]} for ing in ingredients]
+            'recipe_name': recipe[0],
+            'author': f"{recipe[1]} {recipe[2]}",
+            'time_added': recipe[3],
+            'ingredients': [{'food_name': ing[0], 'quantity': ing[1], 'measurement': ing[2]} for ing in ingredients],
+            'steps': [{'step_number': step[0], 'description': step[1]} for step in steps]
         }
 
         return jsonify(recipe_details)

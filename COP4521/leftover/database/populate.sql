@@ -687,5 +687,18 @@ INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALU
 (2, 'Salt', 1, 'teaspoon'),
 (2, 'Pepper', 0.5, 'teaspoon');
 
+INSERT INTO Steps (recipe_id, step_description, step_number) VALUES
+(1, 'Boil water in a large pot.', 1),
+(1, 'Add gnocchi and cook according to the package instructions.', 2),
+(1, 'Heat olive oil in a pan. Add garlic and sauté until golden.', 3),
+(1, 'Add chopped tomatoes and basil to the pan. Season with salt and pepper.', 4),
+(1, 'Drain gnocchi and add to the pan. Toss to coat.', 5),
+(1, 'Serve hot, garnished with more fresh basil.', 6);
 
 
+INSERT INTO Steps (recipe_id, step_description, step_number) VALUES
+(2, 'Cook penne pasta in boiling water until al dente. Drain and set aside.', 1),
+(2, 'In a separate pan, heat olive oil and cook garlic until fragrant.', 2),
+(2, 'Add salted beef and cook until browned.', 3),
+(2, 'Combine cooked penne with beef mixture in a pot.', 4),
+(2, 'Serve warm with a sprinkle of pepper.', 5);
