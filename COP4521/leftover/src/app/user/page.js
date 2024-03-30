@@ -106,7 +106,7 @@ const UserPage = () => {
   const sectionContainerStyle = {
     display: 'flex',
     justifyContent: 'center',
-    gap: '20px',
+    gap: '100px',
     marginTop: '20px',
     width: '100%',
     flexWrap: 'wrap',
@@ -115,7 +115,7 @@ const UserPage = () => {
   const sectionStyle = {
     maxWidth: '300px',
     width: '100%',
-    height: '400px', 
+    height: '700px', 
     overflowY: 'auto', 
     padding: '20px',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
