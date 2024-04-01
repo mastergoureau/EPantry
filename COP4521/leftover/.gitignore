@@ -32,7 +32,7 @@ yarn-error.log*
 .vercel
 
 #database
-database.igi
+database.ini
 
 # typescript
 *.tsbuildinfo
