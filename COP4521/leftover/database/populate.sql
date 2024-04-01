@@ -4,11 +4,10 @@ ON CONFLICT (role_id)
 DO NOTHING;
 
 INSERT INTO Users(username, email_address, first_name, last_name, user_password)
-VALUES ('no21b', 'no21b@fsu.edu', 'Nolan', 'ORourke', '123')
+VALUES ('no21b', 'no21b@fsu.edu', 'Nolan', 'ORourke', '123'),
+('rvl22', 'rvl22@fsu.edu', 'Ryan', 'Ly', 'imHungry')
 ON CONFLICT (username) 
 DO NOTHING;
-
-
 
 INSERT INTO Foods(food_name, food_type) VALUES
 ('Apple','Fruit'),
