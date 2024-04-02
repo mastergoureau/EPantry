@@ -92,3 +92,9 @@ CREATE TABLE Pantry_Ingredients(
     FOREIGN KEY (pantry_food_id) REFERENCES Pantry_Food(pantry_food_id)
 );
 
+DROP TABLE IF EXISTS Reports CASCADE;
+CREATE TABLE Reports(
+    chefname VARCHAR(255) PRIMARY KEY,
+    report TEXT NOT NULL,
+    FOREIGN KEY (chefname) REFERENCES Users(username)
+);
