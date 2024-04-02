@@ -1,11 +1,16 @@
-INSERT INTO Roles (role_id, role_name)
-VALUES (1, 'admin'), (2, 'chef'), (3, 'pleb')
-ON CONFLICT (role_id) 
-DO NOTHING;
+--INSERT INTO Roles (role_id, role_name)
+--VALUES (1, 'admin'), (2, 'chef'), (3, 'pleb')
+--ON CONFLICT (role_id) 
+--DO NOTHING;
+
+CREATE ROLE admin;
+GRANT INSERT, DELETE ON Users, Foods, Recipes TO admin;
+
+CREATE USER rvl22 WITH PASSWORD 'imtiredplswork';
+GRANT admin to rvl22;
 
 INSERT INTO Users(username, email_address, first_name, last_name, user_password)
-VALUES ('no21b', 'no21b@fsu.edu', 'Nolan', 'ORourke', '123'),
-('rvl22', 'rvl22@fsu.edu', 'Ryan', 'Ly', 'imHungry')
+VALUES ('no21b', 'no21b@fsu.edu', 'Nolan', 'ORourke', '123')
 ON CONFLICT (username) 
 DO NOTHING;
 
