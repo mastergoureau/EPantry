@@ -47,9 +47,14 @@ def get_user_info(username):
 def check_session():
     if 'username' in session:
         # Fetch the user-specific information.
-        user_info = get_user_info(session['username'])      
+        user_info = get_user_info(session['username']) 
+        return jsonify(user_info)     
     else:
         return jsonify({'message': 'No active session'})
+@app.route('/logout', methods=['POST'])
+def logout_user():
+    session.pop('username', None)
+    return jsonify({'message': 'User logged out'})
 @app.route('/foods', methods=['GET'])
 def get_foods():
     conn = get_db_connection()
