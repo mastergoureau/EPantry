@@ -19,14 +19,20 @@ def get_user_info(username):
     conn = get_db_connection()
     cur = conn.cursor()
     try:
-        cur.execute("SELECT username, first_name, last_name, email_address FROM Users WHERE username = %s", (username,))
+        cur.execute("""
+            SELECT Users.username, Users.first_name, Users.last_name, Users.email_address, User_Roles.role_id
+            FROM Users
+            INNER JOIN User_Roles ON Users.username = User_Roles.user_id
+            WHERE Users.username = %s
+        """, (username,))
         user = cur.fetchone()
         if user:
             user_info = {
                 'username': user[0],
                 'firstName': user[1],
                 'lastName': user[2],
-                'email': user[3]
+                'email': user[3],
+                'role_id': user[4]
             }
             return user_info
         else:
@@ -37,6 +43,13 @@ def get_user_info(username):
     finally:
         cur.close()
         conn.close()
+@app.route('/check_session', methods=['GET'])
+def check_session():
+    if 'username' in session:
+        # Fetch the user-specific information.
+        user_info = get_user_info(session['username'])      
+    else:
+        return jsonify({'message': 'No active session'})
 @app.route('/foods', methods=['GET'])
 def get_foods():
     conn = get_db_connection()
@@ -136,30 +149,6 @@ def remove_from_pantry():
     except Exception as e:
         conn.rollback()
         return jsonify({'error': str(e)}), 500
-    finally:
-        cur.close()
-        conn.close()
-def get_user_info(username):
-    conn = get_db_connection()
-    cur = conn.cursor()
-    try:
-        # Assuming you have a table named 'Users' with the columns 'username', 'first_name', 'last_name', and 'email_address'
-        cur.execute("SELECT username, first_name, last_name, email_address FROM Users WHERE username = %s", (username,))
-        user = cur.fetchone()
-        if user:
-            # Convert the tuple returned from fetchone() into a dictionary
-            user_info = {
-                'username': user[0],
-                'firstName': user[1],
-                'lastName': user[2],
-                'email': user[3]
-            }
-            return user_info
-        else:
-            return None  # User not found
-    except Exception as e:
-        print(f"Error fetching user info: {e}")
-        return None
     finally:
         cur.close()
         conn.close()
@@ -334,5 +323,6 @@ def welcome_user():  # Removed the username parameter
         return jsonify(user_info)
     else:
         return jsonify({'error': 'User not found'}), 404
+    
 if __name__ == '__main__':
     app.run(debug=True)
