@@ -19,6 +19,7 @@ def get_user_info(username):
     conn = get_db_connection()
     cur = conn.cursor()
     try:
+        #CHANGE THIS RYAN !!!
         cur.execute("""
             SELECT Users.username, Users.first_name, Users.last_name, Users.email_address, User_Roles.role_id
             FROM Users
