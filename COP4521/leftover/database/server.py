@@ -13,27 +13,17 @@ def get_db_connection():
     params = config()
     return psycopg2.connect(**params)
 
-
-
 def get_user_info(username):
     conn = get_db_connection()
     cur = conn.cursor()
     try:
-        #CHANGE THIS RYAN !!!
-        cur.execute("""
-            SELECT Users.username, Users.first_name, Users.last_name, Users.email_address, User_Roles.role_id
-            FROM Users
-            INNER JOIN User_Roles ON Users.username = User_Roles.user_id
-            WHERE Users.username = %s
-        """, (username,))
+        cur.execute(
+            "SELECT usename, rolname from pg_user INNER JOIN pg_auth_members ON pg_user.usesysid = pg_auth_members.member INNER JOIN pg_roles ON pg_roles.oid = pg_auth_members.roleid WHERE pg_user.usename = '" + str(username) + "'")
         user = cur.fetchone()
         if user:
             user_info = {
                 'username': user[0],
-                'firstName': user[1],
-                'lastName': user[2],
-                'email': user[3],
-                'role_id': user[4]
+                'role': user[1]
             }
             return user_info
         else:
@@ -44,6 +34,7 @@ def get_user_info(username):
     finally:
         cur.close()
         conn.close()
+
 @app.route('/check_session', methods=['GET'])
 def check_session():
     if 'username' in session:
@@ -52,10 +43,12 @@ def check_session():
         return jsonify(user_info)     
     else:
         return jsonify({'message': 'No active session'})
+    
 @app.route('/logout', methods=['POST'])
 def logout_user():
     session.pop('username', None)
     return jsonify({'message': 'User logged out'})
+
 @app.route('/foods', methods=['GET'])
 def get_foods():
     conn = get_db_connection()
@@ -65,6 +58,7 @@ def get_foods():
     cur.close()
     conn.close()
     return jsonify([{'food_name': food[0], 'food_type': food[1]} for food in foods])
+
 @app.route('/pantry/items', methods=['GET'])
 def get_pantry_items():
     if 'username' not in session:
@@ -88,6 +82,7 @@ def get_pantry_items():
     finally:
         cur.close()
         conn.close()
+
 @app.route('/recipes', methods=['GET'])
 def get_recipes():
     conn = get_db_connection()
@@ -126,6 +121,7 @@ def add_to_pantry():
     finally:
         cur.close()
         conn.close()
+
 @app.route('/pantry/remove', methods=['POST'])
 def remove_from_pantry():
     if 'username' not in session:
@@ -158,6 +154,7 @@ def remove_from_pantry():
     finally:
         cur.close()
         conn.close()
+
 @app.route('/recipes/available', methods=['GET'])
 def get_available_recipes():
     if 'username' not in session:
@@ -193,6 +190,7 @@ def get_available_recipes():
     finally:
         cur.close()
         conn.close()
+
 @app.route('/select_recipe/<int:recipe_id>', methods=['POST'])
 def select_recipe(recipe_id):
     print("Selecting recipe ID:", recipe_id)  # Debug print
@@ -203,6 +201,7 @@ def select_recipe(recipe_id):
     else:
         print("Failed to select recipe, no username in session")  # Identify failure
         return jsonify({'error': 'Unauthorized'}), 401
+    
 @app.route('/recipe', methods=['GET'])
 def get_recipe_details():
     if 'username' not in session or 'selected_recipe_id' not in session:
@@ -257,12 +256,6 @@ def get_recipe_details():
         cur.close()
         conn.close()
 
-
-
-
-
-
-
 # This is our pages for which we need the users to stay on
 @app.route('/login', methods=['POST'])
 def login_user():
@@ -276,6 +269,7 @@ def login_user():
         existing_user = cur.fetchone()
         print(data)
         if existing_user:
+            # Need to Encrypt Password First Before Checking
             # Check if the password is correct
             if existing_user[4] == data['password']:
                 session['username'] = data['username']
@@ -289,31 +283,41 @@ def login_user():
     finally:
         cur.close()
         conn.close()
+
 @app.route('/register', methods=['POST'])
 def register_user():
+    print("On Register Page")
     conn = get_db_connection()
     cur = conn.cursor()
     # Extract form data from the request
     data = request.json
     try:
+        print("Trying SELECT Query to Find Identical User")
         cur.execute(
-            "INSERT INTO Users (username, email_address, first_name, last_name, user_password) VALUES (%s, %s, %s, %s, %s)",
-            (data['username'], data['email'], data['firstName'], data['lastName'], data['password']))
-        cur.execute(
-            "INSERT INTO User_Roles (user_id, role_id) VALUES (%s,%s)", (data['username'],3))
-        cur.execute(
-            "INSERT INTO Pantry (ownername) VALUES (%s)",
-            (data['username'],)
-        )
-        conn.commit()
-        session['username'] = data['username']
-        return {'message': 'User created successfully', 'username': data['username']}, 201
+            "SELECT usename FROM pg_user WHERE usename = '" + str(data['username']) + "'")
+        existing_user = cur.fetchone()
+        print("Fetched User")
+        if existing_user:
+            print("Username Taken")
+            return jsonify({'message': 'username already taken'}), 403
+        else:
+            print("Username Not Taken")
+            cur.execute("CREATE USER \"" + str(data['username']) + "\" WITH PASSWORD '" + str(data['password']) + "'")
+            conn.commit()
+            print("Executed CREATE USER Query")
+            cur.execute("GRANT customer TO \"" + str(data['username']) + "\"")
+            print("Executed GRANT Permissions Query")
+            conn.commit()
+            session['username'] = data['username']
+            print("Created User")
+            return jsonify({'message': 'User created successfully', 'username': data['username']}), 201
     except Exception as e:
         conn.rollback()
         return {'Error': str(e)}, 500
     finally:
         cur.close()
         conn.close()
+
 @app.route('/user', methods=['GET'])
 def welcome_user():  # Removed the username parameter
     # First, check if the user is logged in by looking in the session.
@@ -331,4 +335,4 @@ def welcome_user():  # Removed the username parameter
         return jsonify({'error': 'User not found'}), 404
     
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
