@@ -3,22 +3,7 @@ CREATE TABLE Users(
     username VARCHAR(255) PRIMARY KEY,
     email_address VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NOT NULL,
-    last_name VARCHAR(255) NOT NULL,
-    user_password VARCHAR(255) NOT NULL
-);
-
-DROP TABLE IF EXISTS Roles CASCADE;
-CREATE TABLE Roles(
-    role_id SERIAL PRIMARY KEY,
-    role_name VARCHAR(20) NOT NULL
-);
-
-DROP TABLE IF EXISTS User_Roles CASCADE;
-CREATE TABLE User_Roles(
-    user_id varchar(255),           
-    role_id SERIAL, 
-    FOREIGN KEY (user_id) REFERENCES Users(username),
-    FOREIGN KEY (role_id) REFERENCES Roles(role_id)
+    last_name VARCHAR(255) NOT NULL
 );
 
 DROP TABLE IF EXISTS Foods CASCADE;
