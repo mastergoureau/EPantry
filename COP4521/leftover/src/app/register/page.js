@@ -9,19 +9,25 @@ const RegisterPage = () => {
     lastName: '',
     email: '',
     username: '',
-    password: ''
+    password: '',
+    isChef: false,
   });
 
 
 
-
   const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const { name, type, checked } = event.target;
+    const value = type === "checkbox" ? checked : event.target.value;
+    setFormData(prevFormData => ({
+       ...prevFormData,
+       [name]: value,
+    }));
+   };
+   
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log(formData);
     const response = await fetch('http://localhost:8080/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -102,6 +108,10 @@ const RegisterPage = () => {
             value={formData.confirmPassword} // Corrected to use formData
             onChange={handleChange}
           />
+          <div >
+            <label className="font-bold text-lg text-muted mr-4">Are you a chef?</label>
+            <input type="checkbox" name="isChef" value={formData.isChef} onChange={handleChange} />
+          </div>
           <div className='p-4'/>
           <button type="submit" className="bg-secondary hover:bg-muted text-white hover:text-secondary rounded-lg py-2">
             Create Account
