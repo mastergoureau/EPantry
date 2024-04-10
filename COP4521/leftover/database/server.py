@@ -306,8 +306,11 @@ def register_user():
             conn.commit()
             print("Executed CREATE USER Query")
             cur.execute("GRANT customer TO \"" + str(data['username']) + "\"")
-            print("Executed GRANT Permissions Query")
             conn.commit()
+            print("Executed GRANT Permissions Query")
+            cur.execute("INSERT INTO Users(username, email_address, first_name, last_name) VALUES ('" + str(data['username']) + "', '" + str(data['email']) + "', '" + str(data['firstName']) + "', '" + str(data['lastName']) + "')")
+            conn.commit()
+            print("Executed INSERT Query")
             session['username'] = data['username']
             print("Created User")
             return jsonify({'message': 'User created successfully', 'username': data['username']}), 201
