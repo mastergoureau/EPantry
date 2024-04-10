@@ -6,7 +6,7 @@ const RecipePage = () => {
 
   useEffect(() => {
     const fetchRecipeDetails = async () => {
-      const response = await fetch(`http://localhost:8080/recipe`, {
+      const response = await fetch(`http://localhost:5000/recipe`, {
         credentials: 'include',
       });
       if (response.ok) {
