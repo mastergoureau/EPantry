@@ -21,7 +21,7 @@ const Header = () => {
   };
 
 async function logoutUser() {
-  const response = await fetch('http://localhost:5000/logout', {
+  const response = await fetch('http://localhost:8080/logout', {
     method: 'POST',
     credentials: 'include',
   });
@@ -36,7 +36,7 @@ async function logoutUser() {
 }
 
   const fetchUsersRole = useCallback(async () => {
-    const response = await fetch('http://localhost:5000/check_session', {
+    const response = await fetch('http://localhost:8080/check_session', {
       credentials: 'include',
     });
     if (response.ok) {
@@ -94,7 +94,7 @@ async function logoutUser() {
           </>
         ) : (
           <>
-            {user.role_id === 1 && (
+            {user.role === 'admin' && (
               <>
                 <li key='3' className="nav-links px-4 cursor-pointer capitalize font-medium text-gray-500 hover:scale-105 hover:text-white duration-200 link-underline">
                   <Link href="/adminpage">Admin</Link>
@@ -107,7 +107,7 @@ async function logoutUser() {
                 </li>
               </>
             )}
-            {user.role_id === 2 && (
+            {user.role === 'chef' && (
               <>
                 <li key='6' className="nav-links px-4 cursor-pointer capitalize font-medium text-gray-500 hover:scale-105 hover:text-white duration-200 link-underline">
                   <Link href="/chef">Chef</Link>
@@ -120,7 +120,7 @@ async function logoutUser() {
                 </li>
               </>
             )}
-            {user.role_id === 3 && (
+            {user.role === 'customer' && (
               <>
                 <li key='9' className="nav-links px-4 cursor-pointer capitalize font-medium text-gray-500 hover:scale-105 hover:text-white duration-200 link-underline">
                   <Link href="/user">{user.username}</Link>
