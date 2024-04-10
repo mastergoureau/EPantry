@@ -1,5 +1,7 @@
 CREATE EXTENSION pgcrypto;
 
+GRANT CONNECT ON DATABASE "Leftover" TO PUBLIC;
+
 CREATE ROLE chef;
 GRANT SELECT, INSERT, DELETE ON Pantry, Recipes to chef;
 GRANT SELECT ON Foods to chef;
