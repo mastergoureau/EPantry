@@ -21,7 +21,7 @@ const Header = () => {
   };
 
 async function logoutUser() {
-  const response = await fetch('http://localhost:8080/logout', {
+  const response = await fetch('http://localhost:5000/logout', {
     method: 'POST',
     credentials: 'include',
   });
@@ -36,7 +36,7 @@ async function logoutUser() {
 }
 
   const fetchUsersRole = useCallback(async () => {
-    const response = await fetch('http://localhost:8080/check_session', {
+    const response = await fetch('http://localhost:5000/check_session', {
       credentials: 'include',
     });
     if (response.ok) {
