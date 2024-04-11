@@ -5,6 +5,7 @@ GRANT CONNECT ON DATABASE "Leftover" TO PUBLIC;
 CREATE ROLE chef;
 GRANT SELECT, INSERT, DELETE ON Pantry, Recipes to chef;
 GRANT SELECT ON Foods to chef;
+GRANT INSERT ON Reports to chef;
 
 CREATE ROLE customer;
 GRANT SELECT, INSERT, DELETE ON Pantry to customer;
