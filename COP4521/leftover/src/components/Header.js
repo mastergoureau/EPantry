@@ -94,7 +94,7 @@ async function logoutUser() {
           </>
         ) : (
           <>
-            {user.username === 'postgres' && (
+            {user.role === 'admin' && (
               <>
                 <li key='3' className="nav-links px-4 cursor-pointer capitalize font-medium text-gray-500 hover:scale-105 hover:text-white duration-200 link-underline">
                   <Link href="/adminpage">Admin</Link>
