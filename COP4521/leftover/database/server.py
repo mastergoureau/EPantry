@@ -29,6 +29,12 @@ def get_user_info(username):
                 'role': user[1]
             }
             return user_info
+        elif username == 'postgres':
+            user_info = {
+                'username': 'postgres',
+                'role': 'admin'
+            }
+            return user_info
         else:
             return None  # User not found
     except Exception as e:
@@ -262,7 +268,6 @@ def get_recipe_details():
 # This is our pages for which we need the users to stay on
 @app.route('/login', methods=['POST'])
 def login_user():
-    md5_str = 'md5'
     print("On Login Page")
     conn = get_db_connection()
     cur = conn.cursor()
@@ -279,7 +284,7 @@ def login_user():
             hashed_pw = str(data['password']) + str(data['username'])
             hashed_pw = hashlib.md5(hashed_pw.encode())
             hashed_pw = hashed_pw.hexdigest()
-            hashed_pw = md5_str + hashed_pw
+            hashed_pw = 'md5' + hashed_pw
             # Check if the password is correct
             if existing_user[1] == hashed_pw:
                 session['username'] = data['username']
