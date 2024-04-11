@@ -9,7 +9,7 @@ const UserPage = () => {
   const [searchTerm, setSearchTerm] = useState(''); // State to hold the search term
 
   const fetchPantryItems = useCallback(async () => {
-    const response = await fetch('http://localhost:5000/pantry/items', {
+    const response = await fetch('http://localhost:8080/pantry/items', {
       credentials: 'include',
     });
     if (response.ok) {
@@ -20,7 +20,7 @@ const UserPage = () => {
     }
   }, []);
   const fetchAvailableRecipes = useCallback(async () => {
-    const response = await fetch('http://localhost:5000/recipes/available', {
+    const response = await fetch('http://localhost:8080/recipes/available', {
       credentials: 'include',
     });
     if (response.ok) {
@@ -33,7 +33,7 @@ const UserPage = () => {
 
   useEffect(() => {
     const fetchFoods = async () => {
-      const response = await fetch('http://localhost:5000/foods', {
+      const response = await fetch('http://localhost:8080/foods', {
         credentials: 'include',
       });
       if (response.ok) {
@@ -50,7 +50,7 @@ const UserPage = () => {
   }, [fetchPantryItems, fetchAvailableRecipes]);
   
   function selectRecipe(recipeId) {
-    fetch(`http://localhost:5000/select_recipe/${recipeId}`, {
+    fetch(`http://localhost:8080/select_recipe/${recipeId}`, {
       method: 'POST', // Assuming you're updating to use POST to match session handling
       credentials: 'include', // Important for sessions
     })
@@ -65,7 +65,7 @@ const UserPage = () => {
   }
 
   const addToPantry = async (foodName) => {
-    const response = await fetch('http://localhost:5000/pantry/add', {
+    const response = await fetch('http://localhost:8080/pantry/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -81,7 +81,7 @@ const UserPage = () => {
   };
 
   const removeFromPantry = async (foodName) => {
-    const response = await fetch('http://localhost:5000/pantry/remove', {
+    const response = await fetch('http://localhost:8080/pantry/remove', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
