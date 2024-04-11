@@ -3,7 +3,7 @@ from flask_cors import CORS
 import psycopg2
 from config import config
 from flask_jwt_extended import JWTManager
-
+import hashlib
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
@@ -262,19 +262,26 @@ def get_recipe_details():
 # This is our pages for which we need the users to stay on
 @app.route('/login', methods=['POST'])
 def login_user():
+    md5_str = 'md5'
+    print("On Login Page")
     conn = get_db_connection()
     cur = conn.cursor()
     # Extract form data from the request
     data = request.json
     try:
         # Check if the username exists
-        cur.execute("SELECT * FROM Users WHERE username = %s", (data['username'],))
+        cur.execute("SELECT rolname, rolpassword FROM pg_authid WHERE rolname = '" + str(data['username']) + "'")
         existing_user = cur.fetchone()
         print(data)
         if existing_user:
-            # Need to Encrypt Password First Before Checking
+            print("User Exists, Check Password")
+            # Encrypt the Password, Concatenated w/ 'md5'
+            hashed_pw = str(data['password']) + str(data['username'])
+            hashed_pw = hashlib.md5(hashed_pw.encode())
+            hashed_pw = hashed_pw.hexdigest()
+            hashed_pw = md5_str + hashed_pw
             # Check if the password is correct
-            if existing_user[4] == data['password']:
+            if existing_user[1] == hashed_pw:
                 session['username'] = data['username']
                 return {'message': 'Login successful', 'username': data['username']}, 200
             else:
