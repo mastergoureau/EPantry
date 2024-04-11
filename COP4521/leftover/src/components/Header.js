@@ -21,7 +21,7 @@ const Header = () => {
   };
 
 async function logoutUser() {
-  const response = await fetch('http://localhost:5000/logout', {
+  const response = await fetch('http://localhost:8080/logout', {
     method: 'POST',
     credentials: 'include',
   });
@@ -36,7 +36,7 @@ async function logoutUser() {
 }
 
   const fetchUsersRole = useCallback(async () => {
-    const response = await fetch('http://localhost:5000/check_session', {
+    const response = await fetch('http://localhost:8080/check_session', {
       credentials: 'include',
     });
     if (response.ok) {
@@ -94,7 +94,7 @@ async function logoutUser() {
           </>
         ) : (
           <>
-            {user.role === 'admin' && (
+            {user.username === 'postgres' && (
               <>
                 <li key='3' className="nav-links px-4 cursor-pointer capitalize font-medium text-gray-500 hover:scale-105 hover:text-white duration-200 link-underline">
                   <Link href="/adminpage">Admin</Link>
