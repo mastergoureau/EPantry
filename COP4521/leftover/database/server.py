@@ -18,7 +18,10 @@ def get_user_info(username):
     cur = conn.cursor()
     try:
         cur.execute(
-            "SELECT usename, rolname from pg_user INNER JOIN pg_auth_members ON pg_user.usesysid = pg_auth_members.member INNER JOIN pg_roles ON pg_roles.oid = pg_auth_members.roleid WHERE pg_user.usename = '" + str(username) + "'")
+            "SELECT usename, rolname from pg_user \
+                INNER JOIN pg_auth_members ON pg_user.usesysid = pg_auth_members.member \
+                INNER JOIN pg_roles ON pg_roles.oid = pg_auth_members.roleid \
+                WHERE pg_user.usename = '" + str(username) + "'")
         user = cur.fetchone()
         if user:
             user_info = {
@@ -305,10 +308,15 @@ def register_user():
             cur.execute("CREATE USER \"" + str(data['username']) + "\" WITH PASSWORD '" + str(data['password']) + "'")
             conn.commit()
             print("Executed CREATE USER Query")
-            cur.execute("GRANT customer TO \"" + str(data['username']) + "\"")
+            if data['isChef'] is True:
+                cur.execute("GRANT chef TO \"" + str(data['username']) + "\"")
+            else:
+                cur.execute("GRANT customer TO \"" + str(data['username']) + "\"")
             conn.commit()
             print("Executed GRANT Permissions Query")
-            cur.execute("INSERT INTO Users(username, email_address, first_name, last_name) VALUES ('" + str(data['username']) + "', '" + str(data['email']) + "', '" + str(data['firstName']) + "', '" + str(data['lastName']) + "')")
+            cur.execute("INSERT INTO Users(username, email_address, first_name, last_name) \
+                        VALUES ('" + str(data['username']) + "', '" + str(data['email']) + "', '" \
+                        + str(data['firstName']) + "', '" + str(data['lastName']) + "')")
             conn.commit()
             print("Executed INSERT Query")
             session['username'] = data['username']
@@ -338,4 +346,4 @@ def welcome_user():  # Removed the username parameter
         return jsonify({'error': 'User not found'}), 404
     
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=8080)
