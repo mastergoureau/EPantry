@@ -11,6 +11,10 @@ CREATE ROLE customer;
 GRANT SELECT, INSERT, DELETE ON Pantry to customer;
 GRANT INSERT ON Reports to customer;
 
+CREATE USER dpg with password '123';
+INSERT INTO Users(username, email_address, first_name, last_name) 
+                        VALUES ('dpg','dylangoureau@gmail.com','Dylan','Goureau');
+
 INSERT INTO Foods(food_name, food_type) VALUES
 ('Apple','Fruit'),
 ('Apricot', 'Fruit'),
@@ -646,60 +650,60 @@ INSERT INTO Foods(food_name, food_type) VALUES
 ON CONFLICT (food_name) 
 DO NOTHING;
 
---INSERT INTO Recipes (recipe_name, time_added, author) 
---VALUES ('Tomato Basil Pasta', CURRENT_DATE, 'no21b');
+INSERT INTO Recipes (recipe_name, time_added, author) 
+VALUES ('Tomato Basil Pasta', CURRENT_DATE, 'dpg');
 
---INSERT INTO Recipes (recipe_name, time_added, author) 
---VALUES ('Sphagetti Bolognese', CURRENT_DATE, 'no21b');
+INSERT INTO Recipes (recipe_name, time_added, author) 
+VALUES ('Sphagetti Bolognese', CURRENT_DATE, 'dpg');
 
---INSERT INTO Recipe_Foods (recipe_id, food_name)
---VALUES
---(1, 'Tomato'),
---(1, 'Basil'),
---(1, 'Gnocchi'),
---(1, 'Olive Oil'),
---(1, 'Garlic'),
---(1, 'Salt'),
---(1, 'Pepper');
+INSERT INTO Recipe_Foods (recipe_id, food_name)
+VALUES
+(1, 'Tomato'),
+(1, 'Basil'),
+(1, 'Gnocchi'),
+(1, 'Olive Oil'),
+(1, 'Garlic'),
+(1, 'Salt'),
+(1, 'Pepper');
 
---INSERT INTO Recipe_Foods (recipe_id, food_name)
---VALUES 
---(2, 'Penne'),
---(2, 'Salted Beef'),
---(2, 'Olive Oil'),
---(2, 'Garlic'),
---(2, 'Salt'),
---(2, 'Pepper');
+INSERT INTO Recipe_Foods (recipe_id, food_name)
+VALUES 
+(2, 'Penne'),
+(2, 'Salted Beef'),
+(2, 'Olive Oil'),
+(2, 'Garlic'),
+(2, 'Salt'),
+(2, 'Pepper');
 
---INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALUES
---(1, 'Tomato', 2, 'cups'),
---(1, 'Basil', 0.5, 'cup'),
---(1, 'Gnocchi', 8, 'ounces'),
---(1, 'Olive Oil', 2, 'table'),
---(1, 'Garlic', 2, 'cloves'),
---(1, 'Salt', 1, 'teaspoon'),
---(1, 'Pepper', 0.5, 'teaspoon');
+INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALUES
+(1, 'Tomato', 2, 'cups'),
+(1, 'Basil', 0.5, 'cup'),
+(1, 'Gnocchi', 8, 'ounces'),
+(1, 'Olive Oil', 2, 'table'),
+(1, 'Garlic', 2, 'cloves'),
+(1, 'Salt', 1, 'teaspoon'),
+(1, 'Pepper', 0.5, 'teaspoon');
 
---INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALUES
---(2, 'Penne', 2, 'cups'),
---(2, 'Salted Beef', 0.5, 'cup'),
---(2, 'Olive Oil', 2, 'table'),
---(2, 'Garlic', 2, 'cloves'),
---(2, 'Salt', 1, 'teaspoon'),
---(2, 'Pepper', 0.5, 'teaspoon');
+INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALUES
+(2, 'Penne', 2, 'cups'),
+(2, 'Salted Beef', 0.5, 'cup'),
+(2, 'Olive Oil', 2, 'table'),
+(2, 'Garlic', 2, 'cloves'),
+(2, 'Salt', 1, 'teaspoon'),
+(2, 'Pepper', 0.5, 'teaspoon');
 
---INSERT INTO Steps (recipe_id, step_description, step_number) VALUES
---(1, 'Boil water in a large pot.', 1),
---(1, 'Add gnocchi and cook according to the package instructions.', 2),
---(1, 'Heat olive oil in a pan. Add garlic and sauté until golden.', 3),
---(1, 'Add chopped tomatoes and basil to the pan. Season with salt and pepper.', 4),
---(1, 'Drain gnocchi and add to the pan. Toss to coat.', 5),
---(1, 'Serve hot, garnished with more fresh basil.', 6);
+INSERT INTO Steps (recipe_id, step_description, step_number) VALUES
+(1, 'Boil water in a large pot.', 1),
+(1, 'Add gnocchi and cook according to the package instructions.', 2),
+(1, 'Heat olive oil in a pan. Add garlic and sauté until golden.', 3),
+(1, 'Add chopped tomatoes and basil to the pan. Season with salt and pepper.', 4),
+(1, 'Drain gnocchi and add to the pan. Toss to coat.', 5),
+(1, 'Serve hot, garnished with more fresh basil.', 6);
 
 
---INSERT INTO Steps (recipe_id, step_description, step_number) VALUES
---(2, 'Cook penne pasta in boiling water until al dente. Drain and set aside.', 1),
---(2, 'In a separate pan, heat olive oil and cook garlic until fragrant.', 2),
---(2, 'Add salted beef and cook until browned.', 3),
---(2, 'Combine cooked penne with beef mixture in a pot.', 4),
---(2, 'Serve warm with a sprinkle of pepper.', 5);
+INSERT INTO Steps (recipe_id, step_description, step_number) VALUES
+(2, 'Cook penne pasta in boiling water until al dente. Drain and set aside.', 1),
+(2, 'In a separate pan, heat olive oil and cook garlic until fragrant.', 2),
+(2, 'Add salted beef and cook until browned.', 3),
+(2, 'Combine cooked penne with beef mixture in a pot.', 4),
+(2, 'Serve warm with a sprinkle of pepper.', 5);

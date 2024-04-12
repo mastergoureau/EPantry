@@ -76,11 +76,12 @@ def get_pantry_items():
     username = session['username']
     conn = get_db_connection()
     cur = conn.cursor()
+
     try:
         cur.execute("""
-            SELECT pf.food_name 
-            FROM Pantry_Food pf 
-            JOIN Pantry p ON pf.pantry_id = p.pantry_id 
+            SELECT pf.food_name
+            FROM Pantry_Food pf
+            JOIN Pantry p ON pf.pantry_id = p.pantry_id
             WHERE p.ownername = %s
         """, (username,))
         items = [{'food_name': item[0]} for item in cur.fetchall()]
@@ -106,22 +107,28 @@ def get_recipes():
 def add_to_pantry():
     if 'username' not in session:
         return jsonify({'error': 'Unauthorized'}), 401
-    
+
     username = session['username']
     data = request.json
     food_name = data['food_name']
-    
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
     try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        
-        # Get the pantry_id for the current user
+        cur.execute("SELECT food_name FROM Foods WHERE food_name = %s", (food_name,))
+        if not cur.fetchone():
+            return jsonify({'error': 'Food not found'}), 404
+
         cur.execute("SELECT pantry_id FROM Pantry WHERE ownername = %s", (username,))
-        pantry_id = cur.fetchone()[0]
+        result = cur.fetchone()
+        if not result:
+            return jsonify({'error': 'Pantry not found'}), 404
+
+        pantry_id = result[0]
+
         
-        # Insert into Pantry_Food. Make sure Pantry_Food can reference Pantry and Foods correctly
-        cur.execute("INSERT INTO Pantry_Food (pantry_id, food_name) VALUES (%s, %s)", (pantry_id, food_name))
-        
+        cur.execute("INSERT INTO Pantry_Food (pantry_id, food_name) VALUES (%s, %s) ON CONFLICT DO NOTHING", (pantry_id, food_name))
         conn.commit()
         return jsonify({'message': f'{food_name} added to pantry'}), 200
     except Exception as e:
@@ -140,23 +147,26 @@ def remove_from_pantry():
     data = request.json
     food_name = data['food_name']
 
+    conn = get_db_connection()
+    cur = conn.cursor()
+
     try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        
         # Get the pantry_id for the current user
         cur.execute("SELECT pantry_id FROM Pantry WHERE ownername = %s", (username,))
-        pantry_id_result = cur.fetchone()
-        if pantry_id_result:
-            pantry_id = pantry_id_result[0]
-
-            # Remove the food item from the user's pantry
-            cur.execute("DELETE FROM Pantry_Food WHERE pantry_id = %s AND food_name = %s", 
-                        (pantry_id, food_name))
-            conn.commit()
-            return jsonify({'message': f'{food_name} removed from pantry'}), 200
-        else:
+        result = cur.fetchone()
+        if not result:
             return jsonify({'error': 'Pantry not found'}), 404
+        pantry_id = result[0]
+
+        # Check if the food item is in the user's pantry
+        cur.execute("SELECT pantry_food_id FROM Pantry_Food WHERE pantry_id = %s AND food_name = %s", (pantry_id, food_name))
+        if not cur.fetchone():
+            return jsonify({'error': 'Food not found in pantry'}), 404
+
+        # Remove the food item from the user's pantry
+        cur.execute("DELETE FROM Pantry_Food WHERE pantry_id = %s AND food_name = %s", (pantry_id, food_name))
+        conn.commit()
+        return jsonify({'message': f'{food_name} removed from pantry'}), 200
     except Exception as e:
         conn.rollback()
         return jsonify({'error': str(e)}), 500
@@ -331,6 +341,9 @@ def register_user():
                         + str(data['firstName']) + "', '" + str(data['lastName']) + "')")
             conn.commit()
             print("Executed INSERT Query")
+            cur.execute("INSERT INTO Pantry(ownername) VALUES (%s)", (data['username'],))
+            conn.commit()
+            print("Pantry created for user")
             session['username'] = data['username']
             print("Created User")
             return jsonify({'message': 'User created successfully', 'username': data['username']}), 201
