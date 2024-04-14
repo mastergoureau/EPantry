@@ -17,7 +17,7 @@ CREATE TABLE Recipes(
     recipe_id SERIAL PRIMARY KEY,
     recipe_name VARCHAR(255),
     time_added DATE NOT NULL,
-    author varchar,
+    author VARCHAR(255),
     FOREIGN KEY (author) REFERENCES Users(username)
 );
 
