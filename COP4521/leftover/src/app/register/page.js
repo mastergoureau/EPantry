@@ -38,7 +38,7 @@ const RegisterPage = () => {
     if (response.ok) {
       const data = await response.json();
       // Ensure your app's base URL is correctly prepended if necessary
-      window.location.href = `/user`;
+      window.location.href = '/user';
     } else {
       console.error('Registration failed');
     }
