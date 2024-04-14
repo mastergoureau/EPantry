@@ -62,11 +62,64 @@ def logout_user():
 def get_foods():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Foods")
+    cur.execute("SELECT * FROM Foods ORDER BY food_name")
     foods = cur.fetchall()
     cur.close()
     conn.close()
     return jsonify([{'food_name': food[0], 'food_type': food[1]} for food in foods])
+
+@app.route('/addingredient', methods=['POST'])
+def add_food():
+    print("Attempting to Add Ingredient")
+    conn = get_db_connection()
+    cur = conn.cursor()
+    data = request.json
+    data['food_name'] = data['food_name'].title()
+    data['category'] = data['category'].title()
+    print(data)
+    try:
+        print("Checking if Ingredient in DB")
+        cur.execute("SELECT food_name FROM Foods WHERE food_name = '" + str(data['food_name']) + "'")
+        food = cur.fetchone()
+        print("Extracted Ingredient Name")
+        if food is None:
+            print("Adding Ingredient to DB")
+            cur.execute("INSERT INTO Foods(food_name, food_type) VALUES(%s, %s)", (str(data['food_name']), str(data['category'])))
+            conn.commit()
+            print("Ingredient Added Successfully")
+            return jsonify({'message': 'Ingredient Added Successfully'}), 200
+        elif food[0] == str(data['food_name']):
+            print("Ingredient Already Exists")
+            return jsonify({'message': 'Ingredient Already Exists'}), 404
+    except Exception as e:
+        print(f"Error Adding Ingredient: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+    finally:
+        cur.close()
+        conn.close()
+
+@app.route('/deleteingredient', methods=['POST'])
+def remove_food():
+    print("Attempting to Delete Ingredient")
+    conn = get_db_connection()
+    cur = conn.cursor()
+    data = request.json
+    try:
+        cur.execute("SELECT food_name FROM Foods WHERE food_name = '" + str(data['food_name']) + "'")
+        food = cur.fetchone()
+        if food[0] != str(data['food_name']):
+            print("Ingredient Doesn't Exist")
+            return jsonify({'message': 'Ingredient Does Not Exist'}), 404
+        cur.execute("DELETE FROM Foods WHERE food_name = '" + str(data['food_name']) + "'")
+        conn.commit()
+        print("Ingredient Removed Successfully")
+        return jsonify({'message': 'Ingredient Removed'})
+    except Exception as e:
+        print(f"Error Removing Ingredient: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+    finally:
+        cur.close()
+        conn.close()
 
 @app.route('/pantry/items', methods=['GET'])
 def get_pantry_items():
@@ -93,15 +146,143 @@ def get_pantry_items():
         cur.close()
         conn.close()
 
+@app.route('/getcustomers', methods=['GET'])
+def get_customers():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT usename, rolname \
+                FROM pg_user \
+                INNER JOIN pg_auth_members ON pg_user.usesysid = pg_auth_members.member \
+                INNER JOIN pg_roles ON pg_roles.oid = pg_auth_members.roleid \
+                WHERE pg_roles.rolname = 'customer'")
+    customers = cur.fetchall()
+    cur.close()
+    conn.close()
+    return jsonify([{'user_name': customer[0], 'role': customer[1]} for customer in customers])
+
+@app.route('/deleteuser', methods=['POST'])
+def delete_user():
+    conn  = get_db_connection()
+    cur = conn.cursor()
+    data = request.json
+    print(data)
+    try:
+        cur.execute("SELECT username FROM Users WHERE username = '" + str(data['user_name']) + "'")
+        user = cur.fetchone()
+        print(user)
+        cur.execute("SELECT pantry_id FROM Pantry WHERE ownername = '" + str(user[0]) + "'")
+        pantryID = cur.fetchone()
+        cur.execute("SELECT pantry_food_id FROM Pantry_Food WHERE pantry_id = " + str(pantryID[0]))
+        foods = cur.fetchall()
+        for food in foods:
+            cur.execute("DELETE FROM Pantry_Ingredients WHERE '" + str(food[0]) + "'")
+            conn.commit()
+        cur.execute("DELETE FROM Pantry_Food WHERE pantry_id = " + str(pantryID[0]))
+        conn.commit()
+        cur.execute("DELETE FROM Pantry WHERE ownername = '" + str(user[0]) + "'")
+        conn.commit()
+        print("Deleted User's Pantry")
+        cur.execute("DELETE FROM Users WHERE username = '" + str(data['user_name']) + "'")
+        conn.commit()
+        print("Removed User From Users Table")
+        cur.execute("DROP USER " + str(data['user_name']))
+        conn.commit()
+        print("Removed User from DB")
+        return jsonify({'message': 'User Successully Removed'}), 200
+    except Exception as e:
+        print(f"Error Removing User: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+    finally:
+        cur.close()
+        conn.close()
+
+
+@app.route('/getchefs', methods=['GET'])
+def get_chefs():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT usename, rolname \
+                FROM pg_user \
+                INNER JOIN pg_auth_members ON pg_user.usesysid = pg_auth_members.member \
+                INNER JOIN pg_roles ON pg_roles.oid = pg_auth_members.roleid \
+                WHERE pg_roles.rolname = 'chef'")
+    chefs = cur.fetchall()
+    cur.close()
+    conn.close()
+    return jsonify([{'user_name': chef[0], 'role': chef[1]} for chef in chefs])
+
+@app.route('/deletechefrole', methods=['POST'])
+def revoke_chef_role():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    data = request.json
+    print(data)
+    try:
+        cur.execute("SELECT * FROM Recipes WHERE author = '" + str(data['chef_name']) + "'")
+        recipes = cur.fetchall()
+        print(recipes)
+        for recipe in recipes:
+            cur.execute("DELETE FROM Recipe_Foods WHERE recipe_id = " + str(recipe[0]))
+            conn.commit()
+            cur.execute("DELETE FROM Recipe_Ingredients WHERE recipe_id = " + str(recipe[0]))
+            conn.commit()
+            cur.execute("DELETE FROM Steps WHERE recipe_id = " + str(recipe[0]))
+            conn.commit()
+            print("Delete Data Pertaining Recipes")
+        cur.execute("DELETE FROM Recipes WHERE author = '" + str(data['chef_name']) + "'")
+        conn.commit()
+        print("Removed Recipes Made by the Chef")
+        cur.execute("REVOKE chef FROM " + str(data['chef_name']))
+        conn.commit()
+        print("Revoked Chef Role From User")
+        cur.execute("GRANT customer TO " + str(data['chef_name']))
+        conn.commit()
+        print("Made Chef into a Normal User")
+        return jsonify({'message': 'Revoke Chef Role From User'}), 200
+    except Exception as e:
+        print(f"Error Revoking Chef Role From User: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+    finally:
+        cur.close()
+        conn.close()
+
 @app.route('/recipes', methods=['GET'])
 def get_recipes():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Recipes")
+    cur.execute("SELECT recipe_name, author FROM Recipes")
     recipes = cur.fetchall()
     cur.close()
     conn.close()
-    return jsonify(recipes)
+    return jsonify([{'recipe_name': recipe[0], 'author': recipe[1]} for recipe in recipes])
+
+@app.route('/deletechefrecipe', methods=['POST'])
+def delete_recipe():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    data = request.json
+    print(data)
+    try:
+        cur.execute("SELECT * FROM Recipes WHERE recipe_name = '" + str(data['recipe_name']) + "'")
+        recipe = cur.fetchone()
+        print(recipe)
+        cur.execute("DELETE FROM Recipe_Foods WHERE recipe_id = " + str(recipe[0]))
+        conn.commit()
+        cur.execute("DELETE FROM Recipe_Ingredients WHERE recipe_id = " + str(recipe[0]))
+        conn.commit()
+        cur.execute("DELETE FROM Steps WHERE recipe_id = " + str(recipe[0]))
+        conn.commit()
+        print("Deleted Data Pertaining Recipes")
+        cur.execute("DELETE FROM Recipes WHERE recipe_name = '" + str(data['recipe_name']) + "'")
+        conn.commit()
+        print("Deleted Recipe")
+        return jsonify({'message': 'Recipe Successfully Removed'}), 200
+    except Exception as e:
+        print(f"Error Removing Recipe: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+    finally:
+        cur.close()
+        conn.close()
 
 @app.route('/pantry/add', methods=['POST'])
 def add_to_pantry():
