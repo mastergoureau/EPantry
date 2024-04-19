@@ -131,12 +131,11 @@ def get_pantry_items():
     cur = conn.cursor()
 
     try:
-        cur.execute("""
-            SELECT pf.food_name
-            FROM Pantry_Food pf
-            JOIN Pantry p ON pf.pantry_id = p.pantry_id
-            WHERE p.ownername = %s
-        """, (username,))
+        cur.execute("SELECT pf.food_name \
+            FROM Pantry_Food pf \
+            JOIN Pantry p ON pf.pantry_id = p.pantry_id \
+            WHERE p.ownername = %s \
+        ", (username,))
         items = [{'food_name': item[0]} for item in cur.fetchall()]
         return jsonify(items)
     except Exception as e:
@@ -365,22 +364,20 @@ def get_available_recipes():
     cur = conn.cursor()
     
     try:
-        cur.execute("""
-        SELECT r.recipe_id, r.recipe_name
-        FROM Recipes r
-        WHERE NOT EXISTS (
-            SELECT 1
-            FROM Recipe_Ingredients ri
-            WHERE ri.recipe_id = r.recipe_id
-            AND NOT EXISTS (
-                SELECT 1
-                FROM Pantry_Food pf
-                INNER JOIN Pantry p ON pf.pantry_id = p.pantry_id
-                WHERE p.ownername = %s AND pf.food_name = ri.ing_name
-            )
-        )
-
-        """, (username,))
+        cur.execute("SELECT r.recipe_id, r.recipe_name \
+        FROM Recipes r \
+        WHERE NOT EXISTS ( \
+            SELECT 1 \
+            FROM Recipe_Ingredients ri \
+            WHERE ri.recipe_id = r.recipe_id \
+            AND NOT EXISTS ( \
+                SELECT 1 \
+                FROM Pantry_Food pf \
+                INNER JOIN Pantry p ON pf.pantry_id = p.pantry_id \
+                WHERE p.ownername = %s AND pf.food_name = ri.ing_name \
+            ) \
+        ) \
+        ", (username,))
         
         recipes = [{'recipe_id': row[0], 'recipe_name': row[1]} for row in cur.fetchall()]
         return jsonify(recipes)
@@ -413,29 +410,26 @@ def get_recipe_details():
 
     try:
         # Fetch recipe details along with the author's name
-        cur.execute("""
-        SELECT r.recipe_name, u.first_name, u.last_name, r.time_added
-        FROM Recipes r
-        JOIN Users u ON r.author = u.username
-        WHERE r.recipe_id = %s
-        """, (recipe_id,))
+        cur.execute("SELECT r.recipe_name, u.first_name, u.last_name, r.time_added \
+        FROM Recipes r \
+        JOIN Users u ON r.author = u.username \
+        WHERE r.recipe_id = %s \
+        ", (recipe_id,))
         recipe = cur.fetchone()
 
         # Fetch ingredients for the selected recipe
-        cur.execute("""
-        SELECT ing_name, quantity, measurement
-        FROM Recipe_Ingredients
-        WHERE recipe_id = %s
-        """, (recipe_id,))
+        cur.execute("SELECT ing_name, quantity, measurement \
+        FROM Recipe_Ingredients \
+        WHERE recipe_id = %s \
+        ", (recipe_id,))
         ingredients = cur.fetchall()
 
         # Fetch steps for the selected recipe
-        cur.execute("""
-        SELECT step_number, step_description
-        FROM Steps
-        WHERE recipe_id = %s
-        ORDER BY step_number
-        """, (recipe_id,))
+        cur.execute("SELECT step_number, step_description \
+        FROM Steps \
+        WHERE recipe_id = %s \
+        ORDER BY step_number \
+        ", (recipe_id,))
         steps = cur.fetchall()
 
         recipe_details = {
