@@ -168,16 +168,19 @@ def delete_user():
     try:
         cur.execute("SELECT username FROM Users WHERE username = '" + str(data['user_name']) + "'")
         user = cur.fetchone()
-        print(user)
+        print("user = ", user)
         cur.execute("SELECT pantry_id FROM Pantry WHERE ownername = '" + str(user[0]) + "'")
         pantryID = cur.fetchone()
+        print("pantryID = ", pantryID)
         cur.execute("SELECT pantry_food_id FROM Pantry_Food WHERE pantry_id = " + str(pantryID[0]))
         foods = cur.fetchall()
-        for food in foods:
-            cur.execute("DELETE FROM Pantry_Ingredients WHERE '" + str(food[0]) + "'")
-            conn.commit()
-        cur.execute("DELETE FROM Pantry_Food WHERE pantry_id = " + str(pantryID[0]))
-        conn.commit()
+        if foods is not None:
+            for food in foods:
+                cur.execute("DELETE FROM Pantry_Ingredients WHERE pantry_food_id = " + str(food[0]))
+                conn.commit()
+                cur.execute("DELETE FROM Pantry_Food WHERE pantry_id = " + str(pantryID[0]))
+                conn.commit()
+        print("Deleted Pantry Items")
         cur.execute("DELETE FROM Pantry WHERE ownername = '" + str(user[0]) + "'")
         conn.commit()
         print("Deleted User's Pantry")
