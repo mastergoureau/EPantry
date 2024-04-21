@@ -254,6 +254,7 @@ const AdminPage = () => {
     color: 'white',
     transition: 'background-color 0.3s',
   };
+  
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', marginTop: '50px' }}>
