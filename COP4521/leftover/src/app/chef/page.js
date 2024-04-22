@@ -65,7 +65,6 @@ const ChefPage = () => {
 };
 const fetchChefRecipes = async () => {
   try {
-    const username = sessionStorage.getItem('username');
     const response = await fetch('http://localhost:8080/getchefrecipes', { method: 'GET', credentials: 'include' });
     if (response.ok) {
       const data = await response.json();

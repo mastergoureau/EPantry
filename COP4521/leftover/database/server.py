@@ -361,10 +361,12 @@ def add_recipe():
 
 @app.route('/getchefrecipes', methods=['GET'])
 def get_chef_recipes():
-    username = request.args.get('username', '123')  # Need to fix #
+    if 'username' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    username = session['username']
     print(username)
-    if not username:
-        return jsonify({'error': 'Username not provided'}), 400
+    
     conn = get_db_connection()
     cur = conn.cursor()
 
