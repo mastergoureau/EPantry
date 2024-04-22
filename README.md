@@ -7,7 +7,9 @@ Leftover is way to digitally keep track of what ingredients you have availabe wh
 - Fullscreen mode
 - Cross platform
 - Functional database
-- Desktop / Mobile View
+- Desktop view
+- Login / Logout functionality
+- User input sotrage
 
 
 ## Run Locally
@@ -34,13 +36,19 @@ Install dependencies
 
 ```bash
   npm install
+  npm install react-select
 ```
 
 
 ## Usage
 
 First, run the development server:
+'''python3 server.py'''
 
+Next populate the database
+'''python3 setup.py'''
+
+Finally, run the server
 ```bash
 npm run dev
 # or
@@ -59,7 +67,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 - Dylan Goureau - [@mastergoureau](https://github.com/mastergoureau)
 - Brady Henderson - [@bradyhendu](https://github.com/bradyhendu)
-- Madeline Bramson - []()
+- Madeline Bramson - [@madelinebramson](https://github.com/madelinebramson)
 - Ryan Ly - [@kaosu01](https://github.com/kaosu01)
 - Nolan O'Rourke - [@nolanorourke](https://github.com/nolanorourke)
 
