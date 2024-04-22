@@ -13,10 +13,12 @@ GRANT INSERT ON Reports to customer;
 
 CREATE USER dpg with password '123';
 GRANT chef TO dpg;
-INSERT INTO Users(username, email_address, first_name, last_name) 
-                        VALUES ('dpg','dylangoureau@gmail.com','Dylan','Goureau');
-INSERT INTO Pantry(ownername) 
-                        VALUES ('dpg');                       
+INSERT INTO Users(username, email_address, first_name, last_name) VALUES
+('dpg','dylangoureau@gmail.com','Dylan','Goureau');
+
+INSERT INTO Pantry(ownername) VALUES
+('dpg'),
+('postgres');                       
 
 INSERT INTO Foods(food_name, food_type) VALUES
 ('Apple','Fruit'),
