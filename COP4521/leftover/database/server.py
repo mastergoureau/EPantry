@@ -4,6 +4,7 @@ import psycopg2
 from config import config
 from flask_jwt_extended import JWTManager
 import hashlib
+import datetime
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
@@ -265,6 +266,7 @@ def delete_recipe():
     data = request.json
     print(data)
     try:
+
         cur.execute("SELECT * FROM Recipes WHERE recipe_name = '" + str(data['recipe_name']) + "'")
         recipe = cur.fetchone()
         print(recipe)
@@ -286,11 +288,106 @@ def delete_recipe():
         cur.close()
         conn.close()
 
+
+@app.route('/deleterecipe', methods=['POST'])
+def deleterecipe():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    data = request.json
+    print(data)
+    try:
+
+        cur.execute("SELECT * FROM Recipes WHERE recipe_id = '" + str(data['recipe_id']) + "'")
+        recipe = cur.fetchone()
+        print(recipe)
+        cur.execute("DELETE FROM Recipe_Foods WHERE recipe_id = " + str(recipe[0]))
+        conn.commit()
+        cur.execute("DELETE FROM Recipe_Ingredients WHERE recipe_id = " + str(recipe[0]))
+        conn.commit()
+        cur.execute("DELETE FROM Steps WHERE recipe_id = " + str(recipe[0]))
+        conn.commit()
+        print("Deleted Data Pertaining Recipes")
+        cur.execute("DELETE FROM Recipes WHERE recipe_id = '" + str(data['recipe_id']) + "'")
+        conn.commit()
+        print("Deleted Recipe")
+        return jsonify({'message': 'Recipe Successfully Removed'}), 200
+    except Exception as e:
+        print(f"Error Removing Recipe: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+    finally:
+        cur.close()
+        conn.close()
+
+
+
+@app.route('/addrecipe', methods=['POST'])
+def add_recipe():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    data = request.json
+    try:
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # Insert the recipe into the Recipes table
+        cur.execute("INSERT INTO Recipes (recipe_name, time_added, author) VALUES (%s, %s, %s)",
+                    (data['recipe_name'], current_time, session['username']))
+        # Get the recipe_id of the inserted recipe
+
+        cur.execute("SELECT lastval()")
+        recipe_id = cur.fetchone()[0]
+
+        # Insert ingredients into Recipe_Ingredients table
+        for ingredient in data['ingredients']:
+            cur.execute("INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALUES (%s, %s, %s, %s)",
+                        (recipe_id, ingredient['ing_name'], ingredient['quantity'], ingredient['measurement']))
+
+        for ingredient in data['ingredients']:
+            cur.execute("INSERT INTO Recipe_Foods (recipe_id, food_name) VALUES (%s, %s)",
+                        (recipe_id, ingredient['ing_name']))
+
+        # Insert steps into Steps table
+        for index, step in enumerate(data['steps'], 1):
+            cur.execute("INSERT INTO Steps (recipe_id, step_number, step_description) VALUES (%s, %s, %s)",
+                        (recipe_id, index, step['step_description']))
+
+        conn.commit()
+        return jsonify({'message': 'Recipe added successfully', 'recipe_id': recipe_id}), 200
+    except Exception as e:
+        print(f"Error adding recipe: {e}")
+        conn.rollback()
+        return jsonify({'error': 'Internal Server Error'}), 500
+    finally:
+        cur.close()
+        conn.close()
+
+@app.route('/getchefrecipes', methods=['GET'])
+def get_chef_recipes():
+    username = request.args.get('username', '123')  # Need to fix #
+    print(username)
+    if not username:
+        return jsonify({'error': 'Username not provided'}), 400
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    try:
+        # Query the database to retrieve recipes created by the chef
+        cur.execute("SELECT recipe_id, recipe_name FROM Recipes WHERE author = %s", (username,))
+        recipes = cur.fetchall()
+
+        # Construct the response JSON
+        chef_recipes = [{'recipe_id': recipe[0], 'recipe_name': recipe[1]} for recipe in recipes]
+
+        return jsonify(chef_recipes), 200
+    except Exception as e:
+        print(f"Error fetching chef recipes: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+    finally:
+        cur.close()
+        conn.close()
+
 @app.route('/pantry/add', methods=['POST'])
 def add_to_pantry():
     if 'username' not in session:
         return jsonify({'error': 'Unauthorized'}), 401
-
     username = session['username']
     data = request.json
     food_name = data['food_name']

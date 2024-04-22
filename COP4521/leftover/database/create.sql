@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS Recipes CASCADE;
 CREATE TABLE Recipes(
     recipe_id SERIAL PRIMARY KEY,
     recipe_name VARCHAR(255),
-    time_added DATE NOT NULL,
+    time_added TIMESTAMP DEFAULT now(), 
     author VARCHAR(255),
     FOREIGN KEY (author) REFERENCES Users(username)
 );
@@ -37,7 +37,7 @@ CREATE TABLE Recipe_Ingredients(
     recipe_id INTEGER NOT NULL,
     ing_name VARCHAR(255) NOT NULL,
     quantity FLOAT NOT NULL,
-    measurement VARCHAR(8),
+    measurement VARCHAR(255),
     FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id),
     FOREIGN KEY (ing_name) REFERENCES Foods(food_name)
 );
