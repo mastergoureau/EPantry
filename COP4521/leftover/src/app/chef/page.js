@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Select from 'react-select';
+import Select from 'react-select'; // use npm install react-select
 
 const ChefPage = () => {
   const [recipeTitle, setRecipeTitle] = useState('');
