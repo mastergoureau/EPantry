@@ -365,7 +365,6 @@ def get_chef_recipes():
         return jsonify({'error': 'Unauthorized'}), 401
 
     username = session['username']
-    print(username)
     
     conn = get_db_connection()
     cur = conn.cursor()
