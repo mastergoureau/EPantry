@@ -55,6 +55,7 @@ INSERT INTO Foods(food_name, food_type) VALUES
 ('Passion Fruit', 'Fruit'),
 ('Peach','Fruit'),
 ('Pear','Fruit'),
+('Sea Tomato', 'Fruit'),
 ('Tomato','Fruit'),
 ('Permission','Fruit'),
 ('Pineapple', 'Fruit'),
@@ -111,6 +112,7 @@ INSERT INTO Foods(food_name, food_type) VALUES
 ('Horseradish', 'Vegetable'),
 ('Kale', 'Vegetable'),
 ('Leek', 'Vegetable'),
+('Sea Lettuce', 'Vegetable'),
 ('Lettuce', 'Vegetable'),
 ('Mushroom', 'Vegetable'),
 ('Mustard Greens', 'Vegetable'),
@@ -277,6 +279,7 @@ INSERT INTO Foods(food_name, food_type) VALUES
 ('Corn Flour', 'Grain'),
 ('Oat Flour', 'Grain'),
 ('Rye Bread', 'Grain'),  
+('Buns', 'Grain'),
 ('Pita Bread', 'Grain'),
 ('Sourdough Bread', 'Grain'),
 ('Baguette', 'Grain'),
@@ -353,6 +356,7 @@ INSERT INTO Foods(food_name, food_type) VALUES
 ('Curry Paste', 'Condiment'),
 ('Anchovy Paste', 'Condiment'),
 ('Pickle Relish', 'Condiment'),
+('Pickle', 'Condiment'),
 ('Cranberry Sauce', 'Condiment'),
 ('Allspice', 'Spice'),
 ('Salt','Spice'),
@@ -459,6 +463,7 @@ INSERT INTO Foods(food_name, food_type) VALUES
 ('Heavy Cream', 'Dairy'),
 ('Sour Cream', 'Dairy'),
 ('Cottage Cheese', 'Dairy'),
+('Sea Cheese', 'Dairy'),
 ('Cream Cheese', 'Dairy'),
 ('Yogurt', 'Dairy'),
 ('Greek Yogurt', 'Dairy'),
@@ -661,6 +666,9 @@ VALUES ('Tomato Basil Pasta', CURRENT_DATE, 'dpg');
 INSERT INTO Recipes (recipe_name, time_added, author) 
 VALUES ('Sphagetti Bolognese', CURRENT_DATE, 'dpg');
 
+INSERT INTO Recipes (recipe_name, time_added, author)
+VALUES('Krabby Patty', CURRENT_DATE, 'dpg');
+
 INSERT INTO Recipe_Foods (recipe_id, food_name)
 VALUES
 (1, 'Tomato'),
@@ -680,6 +688,19 @@ VALUES
 (2, 'Salt'),
 (2, 'Pepper');
 
+INSERT INTO Recipe_Foods (recipe_id, food_name)
+VALUES
+(3, 'Buns'),
+(3, 'Ground Beef'),
+(3, 'Sea Lettuce'),
+(3, 'Sea Tomato'),
+(3, 'Sesame Seeds'),
+(3, 'Pickle'),
+(3, 'Sea Cheese'),
+(3, 'Ketchup'),
+(3, 'Mustard'),
+(3, 'Mayonnaise');
+
 INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALUES
 (1, 'Tomato', 2, 'cups'),
 (1, 'Basil', 0.5, 'cup'),
@@ -697,6 +718,19 @@ INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALU
 (2, 'Salt', 1, 'teaspoon'),
 (2, 'Pepper', 0.5, 'teaspoon');
 
+INSERT INTO Recipe_Ingredients (recipe_id, ing_name, quantity, measurement) VALUES
+(3, 'Buns', 2, 'buns'),
+(3, 'Ground Beef', 1, 'pound'),
+(3, 'Sea Lettuce', 2, 'leaves'),
+(3, 'Sea Tomato', 0.5, 'tomato'),
+(3, 'Sesame Seeds', 1, 'teaspoon'),
+(3, 'Pickle', 1, 'pickle'),
+(3, 'Sea Cheese', 2 'slices'),
+(3, 'Ketchup', 0.5, 'tablespoon'),
+(3, 'Mustard', 0.5, 'tablespoon'),
+(3, 'Mayonnaise', 0.5,'tablespoon');
+
+
 INSERT INTO Steps (recipe_id, step_description, step_number) VALUES
 (1, 'Boil water in a large pot.', 1),
 (1, 'Add gnocchi and cook according to the package instructions.', 2),
@@ -712,3 +746,18 @@ INSERT INTO Steps (recipe_id, step_description, step_number) VALUES
 (2, 'Add salted beef and cook until browned.', 3),
 (2, 'Combine cooked penne with beef mixture in a pot.', 4),
 (2, 'Serve warm with a sprinkle of pepper.', 5);
+
+INSERT INTO Steps (recipe_id, step_description, step_number) VALUES
+(3, 'Start by preheating your grill or skillet to medium-high heat.', 1),
+(3, 'Divide the ground beef into two equal portions and shape each into a patty that fits the size of your buns.', 2),
+(3, 'Sprinkle sesame seeds evenly over one side of each patty and gently press them in.', 3),
+(3, 'Place the patties on the grill or skillet and cook for about 4-5 minutes on each side, or until they reach your desired level of doneness.', 4),
+(3, 'While the patties are cooking, slice the sea lettuce leaves, sea tomato, and pickle.', 5),
+(3, 'Once the patties are cooked, remove them from the heat and let them rest for a minute.', 6),
+(3, 'Assemble your Krabby Patty by placing a slice of sea cheese on the bottom half of each bun.', 7),
+(3, 'Place a cooked patty on top of the cheese.', 8),
+(3, 'Add a layer of sliced sea lettuce, sea tomato, and pickle on top of the patty.', 9),
+(3, 'Drizzle ketchup, mustard, and mayonnaise on top of the vegetables.', 10),
+(3, 'Place the top half of the bun over the condiments to complete the Krabby Patty.', 11),
+(3, 'Serve immediately and enjoy your delicious Krabby Patty!', 12),
+(3, 'Remember, the secret ingredient to a good Krabby Patty is love!', 13)
