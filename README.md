@@ -43,10 +43,14 @@ Install dependencies
 ## Usage
 
 First, run the development server:
-'''python3 server.py'''
+'''bash
+python3 server.py
+'''
 
 Next populate the database
-'''python3 setup.py'''
+'''bash
+python3 setup.py
+'''
 
 Finally, run the server
 ```bash
