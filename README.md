@@ -5,10 +5,15 @@ Leftover is way to digitally keep track of what ingredients you have availabe wh
 ## Authors
 
 - Dylan Goureau - [@mastergoureau](https://github.com/mastergoureau)
+  - Backend functionality
 - Brady Henderson - [@bradyhendu](https://github.com/bradyhendu)
+  - Front end and design
 - Madeline Bramson - [@madelinebramson](https://github.com/madelinebramson)
+  - Backend functionality
 - Ryan Ly - [@kaosu01](https://github.com/kaosu01)
+  - Backend functionality 
 - Nolan O'Rourke - [@nolanorourke](https://github.com/nolanorourke)
+  - Database creation
 
 ## Features
 
@@ -18,6 +23,7 @@ Leftover is way to digitally keep track of what ingredients you have availabe wh
 - Desktop view
 - Login / Logout functionality
 - User input storage
+- Role Based Access
 
 
 ## Run Locally
@@ -45,11 +51,17 @@ Install dependencies
 ```bash
   npm install i
 ```
+Install PostgreSQL Database with these [Instructions](https://www.w3schools.com/postgresql/postgresql_install.php)
+and create an account
+> [!Important]
+> Ensure that you remember your password, you will have to use these values to access your database and in the next step
 
 
 ## Usage
+First, navigate to the database folder (```Epantry/COP4521/leftover/database/database.ini```), and change the database.ini value in password to the password you use for PostgreSQL
 
-First, run the development server:
+
+Next, run the development server:
 ```bash
 python3 server.py
 ```
@@ -78,8 +90,33 @@ The primary color is `#396643`, the secondary is `#919e8e`, and accent is `#C0C0
 The text color is `#0f1310`
 The background color is `#ffffff`
 
-### Layout
+## Layout
+### Home Page
+* Where the initial drop in point is for the program, where the user will start when they click on the link
 
+### Register Page
+* Where the user will register their account, takes in first and last name, username, email, and password
+* They can also say here if they are registering as a chef or as a regular user
+* Provides link to login page if users doesnt have account
+
+### Login Page
+* Returning users can log in to their accounts here
+* Provides link to register page if user doesnt have account
+
+### User Home Page / Dashboard
+* Displays all food availabe in the database, allows a user to add it to their pantry, then generates avilable receipes based on what is available in the recipes table.
+
+### Chef Page
+* Has a dashboard as well, also has the ability to add recipes to the site
+* On the recipe adding page, a chef is able to add ingredients and steps to their recipes
+* Once added, the recipe is instantly available for all users
+
+### Reipe Page
+* The recipe page lists all ingredients at the top, and all steps below it
+* It also displays the name of the author of the recipe
+
+### Admin Page
+* Admin page has the user dashboard as well, they are also able to revoke chef proviliges, and add food items to the database
 
 ## Included Libraries
 * flask_cors
