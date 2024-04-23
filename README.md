@@ -1,6 +1,14 @@
 
 # Leftover
-Leftover is way to digitally keep track of what ingredients you have availabe while simoultaneously viewing different receipes that tailors to what the user has available. 
+Leftover is way to digitally keep track of what ingredients you have availabe while simoultaneously viewing different receipes that tailors to what the user has available. This not only offers a conveinent way to keep track of what a user may have available when not in the house, but also helps prevent wasting food, and meal prepping, as well as what to purchase when grocery shopping.  
+
+## Authors
+
+- Dylan Goureau - [@mastergoureau](https://github.com/mastergoureau)
+- Brady Henderson - [@bradyhendu](https://github.com/bradyhendu)
+- Madeline Bramson - [@madelinebramson](https://github.com/madelinebramson)
+- Ryan Ly - [@kaosu01](https://github.com/kaosu01)
+- Nolan O'Rourke - [@nolanorourke](https://github.com/nolanorourke)
 
 ## Features
 
@@ -9,7 +17,7 @@ Leftover is way to digitally keep track of what ingredients you have availabe wh
 - Functional database
 - Desktop view
 - Login / Logout functionality
-- User input sotrage
+- User input storage
 
 
 ## Run Locally
@@ -35,8 +43,7 @@ Go to the project directory
 Install dependencies
 
 ```bash
-  npm install
-  npm install react-select
+  npm install i
 ```
 
 
@@ -65,15 +72,39 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Interface
+### Supported Colors
+The primary color is `#396643`, the secondary is `#919e8e`, and accent is `#C0C0C0` 
+The text color is `#0f1310`
+The background color is `#ffffff`
+
+### Layout
 
 
-## Authors
+## Included Libraries
+* flask_cors
+* flask
+  * Flask
+  *  redirect
+  *  jsonify
+  *  request
+  *  session
+* config
+* flask_jwt_extended
+* hashlib
+* datetime
+* psycopg2
+* configparser
+* react
+  * react-select
+* next
 
-- Dylan Goureau - [@mastergoureau](https://github.com/mastergoureau)
-- Brady Henderson - [@bradyhendu](https://github.com/bradyhendu)
-- Madeline Bramson - [@madelinebramson](https://github.com/madelinebramson)
-- Ryan Ly - [@kaosu01](https://github.com/kaosu01)
-- Nolan O'Rourke - [@nolanorourke](https://github.com/nolanorourke)
+## Other Resources
+* Tailwind
+* PostreSQL
+* NextJS
+* React
+
 
 
 
