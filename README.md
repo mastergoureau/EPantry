@@ -5,15 +5,15 @@ Leftover is way to digitally keep track of what ingredients you have availabe wh
 ## Authors
 
 - Dylan Goureau - [@mastergoureau](https://github.com/mastergoureau)
-  - Backend functionality
+  - Front end and Backend functionality (User, Recipe View)
 - Brady Henderson - [@bradyhendu](https://github.com/bradyhendu)
-  - Front end and design
+  - Front end and and Backend Functionality (Login, Register, and Homepage) 
 - Madeline Bramson - [@madelinebramson](https://github.com/madelinebramson)
-  - Backend functionality
+  - Front end and Backend functionality (Chef)
 - Ryan Ly - [@kaosu01](https://github.com/kaosu01)
-  - Backend functionality 
+  - Front End and Backend functionality (Admin and cleanup)
 - Nolan O'Rourke - [@nolanorourke](https://github.com/nolanorourke)
-  - Database creation
+  - Database creation and initialization (PostgreSQL)
 
 ## Features
 
