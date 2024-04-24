@@ -141,6 +141,7 @@ The background color is `#ffffff`
 * PostreSQL
 * NextJS
 * React
+* Node Package Manager
 
 
 
